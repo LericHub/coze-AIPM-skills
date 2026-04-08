@@ -135,7 +135,8 @@ WHILE 未到达结束节点:
   "current_node_status": "INIT/DRAFT",
   "end_node": "",
   "change_history": [],
-  "conversation_log": []
+  "conversation_log": [],
+  "version": 1
 }
 ```
 
@@ -171,6 +172,21 @@ WHILE 未到达结束节点:
 
 ---
 
+## 版本管理
+
+### 版本递增机制
+- 每次节点内容被编辑或更新时，系统会自动生成新版本的文档
+- 版本号按顺序递增（V1, V2, V3...）
+- 所有格式的文档（MD, HTML）均生成对应版本
+
+### 版本文件命名规范
+- Markdown PRD: `V{version}_{date}.md`
+- C端 HTML: `C端_V{version}_{date}.html`
+- B端 HTML: `B端_V{version}_{date}.html`
+- 综合PRD HTML: `PRD_V{version}_{date}.html`
+
+---
+
 ## 确认机制
 
 | 场景 | 确认等级 | 要求 |
@@ -186,11 +202,71 @@ WHILE 未到达结束节点:
 /AIPM/{project_name}/
 ├─ Memory.md                  # 当前状态
 ├─ Memory.bak.{timestamp}.md  # 自动备份
-├─ Prd_md/V{version}_{date}.md
-├─ HTML/C端_V{version}_{date}.html
-├─ HTML/B端_V{version}_{date}.html
-└─ PRD_V{version}_{date}.html
+├─ version.json               # 版本号跟踪
+├─ snapshots/                 # 快照目录
+│  ├─ CLARIFY_{timestamp}.md  # 需求澄清快照
+│  ├─ ANALYSIS_{timestamp}.md # 需求分析快照
+│  ├─ DETAIL_{timestamp}.md   # 详细设计快照
+│  └─ WRITING_{timestamp}.md  # PRD撰写快照
+├─ Prd_md/                    # Markdown格式PRD文档目录
+│  └─ V{version}_{date}.md   # 版本化PRD文档
+├─ HTML/                      # HTML格式PRD文档目录
+│  ├─ C端_V{version}_{date}.html  # C端HTML PRD
+│  ├─ B端_V{version}_{date}.html  # B端HTML PRD
+│  └─ PRD_V{version}_{date}.html  # 综合HTML PRD
+├─ Assets/                    # 资源文件目录
+│  ├─ images/                 # 图片资源
+│  └─ diagrams/               # 图表资源
+├─ Change_Logs/               # 变更日志目录
+│  └─ change_{date}.md       # 变更记录
+└─ Conversation_Logs/         # 会话日志目录
+   └─ log_{date}.md          # 会话记录
 ```
+
+## 项目初始化与验证脚本
+
+### 项目创建脚本
+当用户启动新项目时，系统将自动执行以下脚本创建目录结构：
+
+```bash
+# 执行项目初始化脚本
+./scripts/init_project.sh <project_name>
+```
+
+此脚本将:
+- 创建完整的项目目录结构
+- 初始化 Memory.md 文件
+- 创建快照、文档、资源等所有必需的子目录
+- 生成时间戳备份文件
+- 初始化版本号为1
+
+### 项目恢复脚本
+当用户恢复现有项目时，系统将执行以下脚本验证目录结构：
+
+```bash
+# 执行项目验证脚本
+./scripts/validate_project.sh <project_name>
+```
+
+此脚本将:
+- 验证项目目录结构完整性
+- 检查必需文件是否存在
+- 如发现缺失目录或文件，自动创建缺失的组件
+- 从现有 Memory.md 文件恢复项目状态
+- 创建新版本的文档并递增版本号
+
+### 版本递增脚本
+每当有内容编辑或更新时，执行以下脚本生成新版本：
+
+```bash
+# 递增项目版本并生成新文档
+./scripts/increment_version.sh <project_name>
+```
+
+此脚本将:
+- 读取当前版本号并递增
+- 创建新版本的 Markdown 和 HTML 文档
+- 更新 version.json 文件中的版本号
 
 ---
 

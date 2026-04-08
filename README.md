@@ -6,7 +6,7 @@
 
 ## 核心特性
 
-✅ **4节点标准流程**：需求澄清 → 需求分析 → 详细设计 → PRD撰写  
+✅ **5节点标准流程**：需求澄清 → 需求分析 → 详细设计 → PRD撰写 → 变更分析  
 ✅ **独立变更分析节点**：增量变更无需整体回退  
 ✅ **三级用户确认机制**：确保输出质量  
 ✅ **完整状态持久化**：支持断点恢复  
@@ -16,12 +16,11 @@
 
 ### 核心组件
 - **主控制器**: [SKILL.md](./SKILL.md) - 协调整个工作流程
-- **需求澄清节点**: [step1_demand_clarification.md](./PM_skills/step1_demand_clarification.md) - 明确用户初始需求
+- **需求澄清节点**: [step1_clarify.md](./PM_skills/step1_clarify.md) - 明确用户初始需求
 - **需求分析节点**: [step2_analysis.md](./PM_skills/step2_analysis.md) - 构建初步PRD框架
 - **详细设计节点**: [step3-detail_design.md](./PM_skills/step3-detail_design.md) - 细化交互和数据逻辑
 - **PRD撰写节点**: [step4_prd_writing.md](./PM_skills/step4_prd_writing.md) - 整合并输出最终PRD文档
 - **变更分析节点**: [step5_change_analysis.md](./PM_skills/step5_change_analysis.md) - 处理需求变更
-- **项目完成标识**: [SKILL_final.md](./SKILL_final.md) - 标志项目完成
 
 ## 工作流程
 
@@ -172,6 +171,17 @@ WHILE 未到达结束节点:
   - 支持回滚到特定版本
   - 记录每次变更的影响范围
 
+### 上下文管理规范
+- **快照标签机制**: 每个节点使用标准接口进行上下文读写
+  - 读取: `CONTEXT_READ: [SNAPSHOT_TAG_NAME]`
+  - 写入: `CONTEXT_WRITE: [SNAPSHOT_TAG_NAME]`
+- **快照标签流转**:
+  - `CURRENT_SNAPSHOT_CLARIFY`: 澄清阶段输出 (Step 1)
+  - `CURRENT_SNAPSHOT_ANALYSIS`: 分析阶段输出 (Step 2, 读取 CLARIFY)
+  - `CURRENT_SNAPSHOT_DETAIL`: 详细设计阶段输出 (Step 3, 读取 ANALYSIS)
+  - `CURRENT_SNAPSHOT_WRITING`: PRD写作阶段输出 (Step 4, 读取 DETAIL)
+  - `CURRENT_SNAPSHOT_CHANGE`: 变更分析阶段输出 (Step 5, 读取 WRITING)
+
 ### 用户交互机制
 - **确认机制**: 在每个节点完成后，都需要用户确认才能进入下一个节点，确保输出质量。
 - **修改机制**: 如果用户对某个节点的输出不满意，可以选择修改，重新执行当前节点。
@@ -189,10 +199,28 @@ WHILE 未到达结束节点:
 3. **启动流程**: 触发技能开始需求分析流程
 4. **按提示操作**: 根据系统提示逐步完成需求澄清、分析、设计和PRD撰写
 
-## 贡献
+## 项目目录结构
 
-欢迎提交 Issue 和 Pull Request 来帮助我们改进这个项目！
-
-## 许可证
-
-本项目遵循 MIT 许可证 - 查看 [LICENSE](./LICENSE) 文件了解详情
+```
+/AIPM/{project_name}/
+├─ Memory.md                  # 当前状态文件
+├─ Memory.bak.{timestamp}.md  # 自动备份文件
+├─ snapshots/                 # 快照目录
+│  ├─ CLARIFY_{timestamp}.md  # 需求澄清快照
+│  ├─ ANALYSIS_{timestamp}.md # 需求分析快照
+│  ├─ DETAIL_{timestamp}.md   # 详细设计快照
+│  └─ WRITING_{timestamp}.md  # PRD撰写快照
+├─ Prd_md/                    # Markdown格式PRD文档目录
+│  └─ V{version}_{date}.md   # 版本化PRD文档
+├─ HTML/                      # HTML格式PRD文档目录
+│  ├─ C端_V{version}_{date}.html  # C端HTML PRD
+│  ├─ B端_V{version}_{date}.html  # B端HTML PRD
+│  └─ PRD_V{version}_{date}.html  # 综合HTML PRD
+├─ Assets/                    # 资源文件目录
+│  ├─ images/                 # 图片资源
+│  └─ diagrams/               # 图表资源
+├─ Change_Logs/               # 变更日志目录
+│  └─ change_{date}.md       # 变更记录
+└─ Conversation_Logs/         # 会话日志目录
+   └─ log_{date}.md          # 会话记录
+```
