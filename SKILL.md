@@ -180,10 +180,12 @@ WHILE 未到达结束节点:
 - 所有格式的文档（MD, HTML）均生成对应版本
 
 ### 版本文件命名规范
-- Markdown PRD: `V{version}_{date}.md`
-- C端 HTML: `C端_V{version}_{date}.html`
-- B端 HTML: `B端_V{version}_{date}.html`
+- Markdown PREPRD: `PREPRD_V{version}_{date}.md`
 - 综合PRD HTML: `PRD_V{version}_{date}.html`
+- 概览文档: `overview.html`
+- B端文档: `web/list.html`
+- C端文档: `app/home.html`
+- 索引文件: `protoIndex_V{version}_{date}.html`
 
 ---
 
@@ -210,8 +212,8 @@ WHILE 未到达结束节点:
 此脚本将:
 - 创建完整的项目目录结构
 - 初始化 Memory.md 文件
-- 创建快照、文档、资源等所有必需的子目录
-- 生成时间戳备份文件
+- 创建doc、html、index等所有必需的子目录
+- 生成必需的占位文件
 - 初始化版本号为1
 
 ### 项目恢复脚本
@@ -227,7 +229,6 @@ WHILE 未到达结束节点:
 - 检查必需文件是否存在
 - 如发现缺失目录或文件，自动创建缺失的组件
 - 从现有 Memory.md 文件恢复项目状态
-- 创建新版本的文档并递增版本号
 
 ### 版本递增脚本
 每当有内容编辑或更新时，执行以下脚本生成新版本：

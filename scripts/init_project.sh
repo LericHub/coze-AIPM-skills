@@ -22,15 +22,28 @@ mkdir -p "/AIPM/$PROJECT_NAME"
 cd "/AIPM/$PROJECT_NAME" || exit
 
 # 创建项目主目录结构
-mkdir -p "output/$VERSION"
+mkdir -p "output/$VERSION/"
+
+# 创建输出目录下的完整文件结构
+mkdir -p "output/$VERSION/doc/"
+mkdir -p "output/$VERSION/doc/web/"
+mkdir -p "output/$VERSION/doc/app/"
+mkdir -p "output/$VERSION/html/"
+mkdir -p "output/$VERSION/html/web/"
+mkdir -p "output/$VERSION/html/app/"
+mkdir -p "output/$VERSION/index/"
 
 # 创建核心状态文件
 touch "Memory.md"
 
 # 创建输出目录下的文件结构
-mkdir -p "output/$VERSION/"
-touch "output/$VERSION/PREPRD_${VERSION}_${DATE}.md"
-touch "output/$VERSION/Pr0totye_${VERSION}_${DATE}.html"
+touch "output/$VERSION/doc/overview.html"
+touch "output/$VERSION/doc/web/list.html"
+touch "output/$VERSION/doc/app/home.html"
+touch "output/$VERSION/html/overview.html"
+touch "output/$VERSION/html/web/list.html"
+touch "output/$VERSION/html/app/home.html"
+touch "output/$VERSION/index/protoIndex_${VERSION}_${DATE}.html"
 touch "output/$VERSION/PRD_${VERSION}_${DATE}.html"
 
 echo "项目 $PROJECT_NAME 目录结构创建完成"

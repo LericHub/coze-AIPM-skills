@@ -114,9 +114,20 @@ case $ACTION in
         NEXT_VERSION=$(get_next_version)
         create_versioned_docs $NEXT_VERSION
         ;;
+    "prd")
+        # Generate complete PRD document
+        if [ -z "$3" ]; then
+            echo "错误: 请提供版本号用于生成PRD"
+            echo "用法: $0 <project_name> prd <version>"
+            exit 1
+        fi
+        VERSION=$3
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        "$SCRIPT_DIR/generate_prd.sh" "$PROJECT_NAME" "$VERSION"
+        ;;
     *)
         echo "错误: 未知的动作 '$ACTION'"
-        echo "可用动作: increment, update, refresh"
+        echo "可用动作: increment, update, refresh, prd"
         exit 1
         ;;
 esac
