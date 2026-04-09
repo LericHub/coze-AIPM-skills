@@ -39,12 +39,103 @@
 
 ## 节点说明
 
-- **Step 1 - 需求澄清**：从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准
-- **Step 2 - 需求分析**：构建PRD骨架，识别用户角色、页面清单、埋点方案
-- **Step 3 - 详细设计**：细化业务流程，绘制Mermaid流程图，定义数据逻辑
-- **Step 4 - 原型制作**：生成HTML原型页面，可视化展示产品设计
-- **Step 5 - PRD撰写**：整合所有产出，形成完整PRD文档
-- **Step 6 - 变更分析**：独立变更节点，评估变更影响，制定回退策略
+| 节点 | 文件 | 主要职责 | 输入来源 | 产出物 | 输出路径 |
+|------|------|----------|----------|--------|----------|
+| 需求澄清 | step1_clarify.md | 从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准 | 用户初始需求 | 需求澄清快照 | CURRENT_SNAPSHOT_CLARIFY |
+| 需求分析 | step2_analysis.md | 构建PRD骨架，识别用户角色、页面清单、埋点方案 | [CURRENT_SNAPSHOT_CLARIFY] | 初步PRD文档（Markdown格式） | draft/V{version}_{date}/PrePRD_V{version}_{date}.md |
+| 详细设计 | step3-detail_design.md | 细化业务流程，绘制Mermaid流程图，定义数据逻辑 | [CURRENT_SNAPSHOT_ANALYSIS] | 详细设计文档（包含业务流程图、页面流程图、事件列表等） | CURRENT_SNAPSHOT_DETAIL |
+| 原型制作 | step4_prototyping.md | 生成ASCII线框图和HTML原型页面，可视化展示产品设计 | [CURRENT_SNAPSHOT_DETAIL] | HTML原型代码和索引文件 | output/V{version}/protoIndex_V{version}_{date}.html<br>output/V{version}/html/app/<br>output/V{version}/html/web/ |
+| 原型渲染 | step5_prd_writing.md | 整合所有产出，形成完整PRD文档 | [CURRENT_SNAPSHOT_DETAIL], [CURRENT_SNAPSHOT_PROTOTYPING] | 完整PRD文档（HTML格式） | output/V{version}/html/PRD_V{version}_{date}.html<br>output/V{version}/html/overview.html |
+| 变更分析 | step6_change_analysis.md | 独立变更节点，评估变更影响，制定回退策略 | [CURRENT_SNAPSHOT_WRITING] | 变更分析报告 | CURRENT_SNAPSHOT_CHANGE |
+
+## 状态机与路由逻辑
+
+### 状态管理
+
+AIPM采用状态机驱动的工作流程，通过Memory.md文件持久化存储项目状态，确保中断后能够恢复执行。
+
+#### Memory.md 存储结构
+```json
+{
+  "project_name": "",
+  "created_at": "",
+  "updated_at": "",
+  "node_list": [
+    {"node_name": "", "order": 0, "is_confirmed": false, "completed_at": null}
+  ],
+  "current_node": "",
+  "current_node_status": "INIT/DRAFT",
+  "end_node": "",
+  "change_history": [],
+  "conversation_log": [],
+  "version": 1
+}
+```
+
+#### 状态流转规则
+- 每次Skill启动首先读取Memory.md状态
+- 根据当前节点状态定位到执行节点
+- 输出AIPM头部信息并执行当前节点逻辑
+- 所有状态变更立即持久化到Memory.md
+- 对话日志仅追加不修改
+- 每次写入前自动备份历史版本
+
+### 路由逻辑
+
+```
+用户触发Skill
+    ↓
+检查是否存在Memory.md
+    ↓
+├─ 不存在 → 意图识别 + 方案确认 → 用户确认 → 进入节点1（需求澄清）
+└─ 存在 → 恢复状态 → 定位当前节点 → 输出AIPM头部信息
+    ↓
+节点执行循环
+    ↓
+WHILE 未到达结束节点:
+    调用对应子Skill执行
+    输出节点产出
+    暂停等待用户反馈
+    IF 用户确认:
+        标记节点已完成 → 进入下一节点
+    ELIF 修改:
+        重新执行当前节点
+    ELIF 变更:
+        调用 step6_change_analysis 变更分析
+```
+
+#### 节点路由表
+| 当前节点 | 用户反馈 | 下一步动作 |
+|----------|----------|------------|
+| 需求澄清(CLARIFY) | 确认 | 跳转到需求分析(ANALYSIS) |
+| 需求澄清(CLARIFY) | 修改 | 重新执行需求澄清 |
+| 需求澄清(CLARIFY) | 变更 | 跳转到变更分析(CHANGE) |
+| 需求分析(ANALYSIS) | 确认 | 跳转到详细设计(DETAIL) |
+| 需求分析(ANALYSIS) | 修改 | 重新执行需求分析 |
+| 需求分析(ANALYSIS) | 变更 | 跳转到变更分析(CHANGE) |
+| 详细设计(DETAIL) | 确认 | 跳转到原型制作(PROTOTYPING) |
+| 详细设计(DETAIL) | 修改 | 重新执行详细设计 |
+| 详细设计(DETAIL) | 变更 | 跳转到变更分析(CHANGE) |
+| 原型制作(PROTOTYPING) | 确认 | 跳转到PRD撰写(WRITING) |
+| 原型制作(PROTOTYPING) | 修改 | 重新执行原型制作 |
+| 原型制作(PROTOTYPING) | 变更 | 跳转到变更分析(CHANGE) |
+| PRD撰写(WRITING) | 确认 | 项目交付完成 |
+| PRD撰写(WRITING) | 变更 | 跳转到变更分析(CHANGE) |
+| 变更分析(CHANGE) | 确认变更方案 | 回退到受影响节点 |
+| 变更分析(CHANGE) | 拒绝变更方案 | 返回当前节点 |
+
+### 变更处理流程
+1. 用户提出变更请求时，系统调用变更分析Skill输出完整变更方案
+2. 用户确认变更方案后，系统回退到最早受影响节点
+3. 仅重置受影响节点，保留已确认部分
+4. 从回退节点重新执行流程，直至完成
+
+### 确认机制
+| 场景 | 确认等级 | 要求 |
+|------|----------|------|
+| 执行方案、节点通过、变更执行 | 🔴 强确认 | 必须明确"确认/同意" |
+| 修改重跑 | 🟡 弱确认 | 重新询问用户意见,重新生成内容，重新根据节点说明生成新版本文件 |
+| 查询、查看历史 | 🟢 无需确认 | 直接执行 |
 
 ## 使用方法
 
@@ -60,3 +151,7 @@
 ```
 
 发送任意消息自动恢复上次任务进度。
+
+
+# 文件依赖关系
+![alt text](asset/delegation.png)

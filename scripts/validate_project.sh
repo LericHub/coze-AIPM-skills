@@ -34,32 +34,35 @@ done
 # 检查并创建缺失的目录
 VERSION="V1.0"
 DATE=$(date +%Y%m%d)
+mkdir -p "draft/"
 mkdir -p "output/$VERSION"
 
 # 检查并创建缺失的基础目录
+mkdir -p "draft/V${VERSION}_${DATE}/"
 mkdir -p "output/$VERSION/doc/"
 mkdir -p "output/$VERSION/doc/web/"
 mkdir -p "output/$VERSION/doc/app/"
 mkdir -p "output/$VERSION/html/"
 mkdir -p "output/$VERSION/html/web/"
 mkdir -p "output/$VERSION/html/app/"
-mkdir -p "output/$VERSION/index/"
 
 # 检查并创建缺失的基础文件
 FILES_TO_CHECK=(
+    "draft/V${VERSION}_${DATE}/PrePRD_V${VERSION}_${DATE}.md"
     "output/$VERSION/doc/overview.html"
     "output/$VERSION/doc/web/list.html"
     "output/$VERSION/doc/app/home.html"
     "output/$VERSION/html/overview.html"
     "output/$VERSION/html/web/list.html"
     "output/$VERSION/html/app/home.html"
-    "output/$VERSION/index/protoIndex_${VERSION}_${DATE}.html"
-    "output/$VERSION/PRD_${VERSION}_${DATE}.html"
+    "output/$VERSION/protoIndex_V${VERSION}_${DATE}.html"
+    "output/$VERSION/html/PRD_V${VERSION}_${DATE}.html"
 )
 
 for file in "${FILES_TO_CHECK[@]}"; do
     if [ ! -f "$file" ]; then
         echo "创建缺失文件: $file"
+        mkdir -p "$(dirname "$file")"
         touch "$file"
     fi
 done

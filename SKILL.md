@@ -13,7 +13,7 @@ triggers:
 # 产品经理工作流Skill
 
 ## 核心能力
-✅ 4节点标准流程：需求澄清 → 需求分析 → 详细设计 → PRD撰写
+✅ 6节点标准流程：需求澄清 → 需求分析 → 详细设计 → 原型制作 → PRD撰写 → 变更分析
 ✅ 独立变更分析节点 - 增量变更无需整体回退
 ✅ 三级用户确认机制
 ✅ 完整状态持久化可追溯
@@ -24,7 +24,7 @@ triggers:
 
 ## 完整工作流
 
-```mermaid
+```
 flowchart LR
     START[启动] --> CHECK{存在Memory.md?}
     CHECK -->|否| INIT[意图识别 + 方案确认]
@@ -47,16 +47,21 @@ flowchart LR
     CONFIRM3 -->|变更| CHANGE
     
     DETAIL --> CONFIRM4{确认?}
-    CONFIRM4 -->|是| WRITING[4.PRD撰写]
+    CONFIRM4 -->|是| PROTOTYPING[4.原型制作]
     CONFIRM4 -->|修改| DETAIL
     CONFIRM4 -->|变更| CHANGE
+    
+    PROTOTYPING --> CONFIRM5{确认?}
+    CONFIRM5 -->|是| WRITING[5.PRD撰写]
+    CONFIRM5 -->|修改| PROTOTYPING
+    CONFIRM5 -->|变更| CHANGE
     
     WRITING --> DONE[交付完成]
     WRITING -->|变更| CHANGE
     
-    CHANGE --> CONFIRM5{确认变更方案?}
-    CONFIRM5 -->|是| ROLLBACK[回退到受影响节点]
-    CONFIRM5 -->|否| CURRENT
+    CHANGE --> CONFIRM6{确认变更方案?}
+    CONFIRM6 -->|是| ROLLBACK[回退到受影响节点]
+    CONFIRM6 -->|否| CURRENT
     ROLLBACK --> CURRENT
 ```
 
@@ -67,9 +72,10 @@ flowchart LR
 |------|-------------|-------------|------------|
 | CLARIFY | 0 | step1_clarify.md | ANALYSIS |
 | ANALYSIS | 1 | step2_analysis.md | DETAIL |
-| DETAIL | 2 | step3-detail_design.md | WRITING |
-| WRITING | 3 | step4_prd_writing.md | 结束 |
-| CHANGE_ANALYSIS | - | step5_change_analysis.md | 回退到指定节点 |
+| DETAIL | 2 | step3-detail_design.md | PROTOTYPING |
+| PROTOTYPING | 3 | step4_prototyping.md | WRITING |
+| WRITING | 4 | step5_prd_writing.md | DONE |
+| CHANGE | - | step6_change_analysis.md | 回退到指定节点 |
 
 ---
 
@@ -109,7 +115,7 @@ WHILE 未到达结束节点:
     ELIF 修改:
         重新执行当前节点
     ELIF 变更:
-        调用 step5_change_analysis 变更分析
+        调用 step6_change_analysis 变更分析
 ```
 
 ### 3. 变更处理流程
@@ -174,6 +180,12 @@ WHILE 未到达结束节点:
 
 ## 版本管理
 
+### 文件版本管理
+**只有step3、step4、step5需要产出文件**，文件的版本管理逻辑如下：
+- 第一次进入节点，节点状态 = `INIT`,生成内容之后需要生成文件，step3产出的版本号为V1.0，后续节点产出延续最新的版本号
+- 用户要求修改节点产出，节点状态 = `Draft`，生成内容之后需要生成文件，版本号需要迭代
+- 用户确认节点产出后，将最新版本的文件路径发送给用户，此时无需重新生成文件
+
 ### 版本递增机制
 - 每次节点内容被编辑或更新时，系统会自动生成新版本的文档
 - 版本号按顺序递增（V1, V2, V3...）
@@ -183,8 +195,8 @@ WHILE 未到达结束节点:
 - Markdown PREPRD: `PREPRD_V{version}_{date}.md`
 - 综合PRD HTML: `PRD_V{version}_{date}.html`
 - 概览文档: `overview.html`
-- B端文档: `web/list.html`
-- C端文档: `app/home.html`
+- B端文档: `web/{页面编号}.html`
+- C端文档: `app/{页面编号}.html`
 - 索引文件: `protoIndex_V{version}_{date}.html`
 
 ---
@@ -194,7 +206,7 @@ WHILE 未到达结束节点:
 | 场景 | 确认等级 | 要求 |
 |------|----------|------|
 | 执行方案、节点通过、变更执行 | 🔴 强确认 | 必须明确"确认/同意" |
-| 修改重跑 | 🟡 弱确认 | 重新询问用户意见,重新生成 |
+| 修改重跑 | 🟡 弱确认 | 重新询问用户意见,重新生成内容，重新根据节点说明生成新版本文件 |
 | 查询、查看历史 | 🟢 无需确认 | 直接执行 |
 
 ---
@@ -204,7 +216,7 @@ WHILE 未到达结束节点:
 ### 项目创建脚本
 当用户启动新项目时，系统将自动执行以下脚本创建目录结构：
 
-```bash
+```
 # 执行项目初始化脚本
 ./scripts/init_project.sh <project_name>
 ```
@@ -219,7 +231,7 @@ WHILE 未到达结束节点:
 ### 项目恢复脚本
 当用户恢复现有项目时，系统将执行以下脚本验证目录结构：
 
-```bash
+```
 # 执行项目验证脚本
 ./scripts/validate_project.sh <project_name>
 ```
@@ -233,7 +245,7 @@ WHILE 未到达结束节点:
 ### 版本递增脚本
 每当有内容编辑或更新时，执行以下脚本生成新版本：
 
-```bash
+```
 # 递增项目版本并生成新文档
 ./scripts/increment_version.sh <project_name>
 ```
@@ -242,6 +254,18 @@ WHILE 未到达结束节点:
 - 读取当前版本号并递增
 - 创建新版本的 Markdown 和 HTML 文档
 - 更新 version.json 文件中的版本号
+
+---
+
+## 核心工作流程说明
+
+### 6大核心节点
+1. **CLARIFY** (step1_clarify.md): 需求澄清，从7个维度深度挖掘需求
+2. **ANALYSIS** (step2_analysis.md): 需求分析，构建PRD骨架
+3. **DETAIL** (step3-detail_design.md): 详细设计，细化业务流程和数据逻辑
+4. **PROTOTYPING** (step4_prototyping.md): 原型制作，生成可视化原型
+5. **WRITING** (step5_prd_writing.md): PRD撰写，整合所有产出形成完整文档
+6. **CHANGE** (step6_change_analysis.md): 变更分析，处理需求变更
 
 ---
 

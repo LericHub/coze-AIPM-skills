@@ -25,16 +25,25 @@ trigger:
    - **此步骤完成后不暂停**，不等待用户确认
 
 3. **生成 HTML 原型**:
-   - **必须显性调用 coze 搭建的 `tdesign-component-helper` 技能**
-   - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 Helper 技能
+**按照详细设计文档中的页面列表，生成每一个页面的 HTML 原型，最终通过protoIndex_V{version}_{date}.html整理到一起**
+3.1  **B端原型**
+   - **必须显性调用 coze 搭建的 `tdesign-component-helper` 技能生成与群星**
+   - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 `tdesign-component-helper` 技能
    - 生成基于 TDesign 组件库的 HTML/CSS/JS 代码
-   - 输出文件结构 (严格遵循 README 目录规范):
-     - 路径: `/AIPM/{project_name}/output/V{version}/`
-     - 主索引文件: `protoIndex_V{version}_{date}.html`
-     - *注：若 Helper 生成多文件（如 `page/home.html` 等），需确保主入口文件命名为 `protoIndex_V{version}_{date}.html` 或在该目录下生成标准的索引文件，以便统一访问*
+   - 将生成的 HTML 文件内容写入`/AIPM/{project_name}/output/V{version}/web`目录
+3.2 **C端原型**
+   - **必须显性调用coze中已经搭建的`ui-ux-pro-max-helper`技能生成原型**
+   - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 `ui-ux-pro-max-helper` 技能
+   - 直接调用大模型能力根据 ASCII 线框图结构生成html原型
+   - 将生成的 HTML 文件内容写入`/AIPM/{project_name}/output/V{version}/app`目录
+3.3 **整理并生成索引文件**
+   - 将3.1和3.2生成的html文件整理到一起，生成一个主索引文件
+   - 主索引文件上需要显示页面列表和页面链接地址
+   - 文件保存路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
 
 4. **输出交付物**:
    - 在消息中展示生成的原型文件路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
+   - 在消息中发送文件
    - 将生成的 HTML 文件内容/路径写入 [CURRENT_SNAPSHOT_PROTOTYPING] 上下文标签
 
 5. **用户确认与迭代**:
@@ -45,13 +54,13 @@ trigger:
 6. **迭代处理流程**:
    - **风格参考更新 (可选)**:
      - 若用户在迭代过程中上传了新的风格参考截图或描述了新的风格偏好，需记录并更新风格上下文
-     - 将更新后的风格要点作为后续调用 `tdesign-component-helper` 的参数依据
+     - 将更新后的风格要点作为后续调用 `tdesign-component-helper` 或 `ui-ux-pro-max-helper` 的参数依据
    - 校验用户提及的页面名称是否在原始页面列表中
    - 重绘对应页面的 ASCII 线框图并在对话中展示
-   - 再次**显性调用 `tdesign-component-helper`** 生成修改后的 HTML 代码
+   - 再次**显性调用 `tdesign-component-helper`或者`ui-ux-pro-max-helper`** 生成修改后的 HTML 代码
      - **注意**：调用时需包含最新的风格参考信息（如有）
-   - 更新本地 HTML 文件，版本号递增（如 V1.0 → V1.1），主索引文件名为 `protoIndex_V{new_version}_{date}.html`
-   - **【强制暂停点】**：等待用户确认修改内容
+   - **【强制暂停点】**：等待用户确认修改内容,用户确认后重新生成相应页面的 HTML 原型并更新索引文件。
+   - 版本维护方式参考`SKILL.md`
 
 ## 技能描述
 本技能负责将详细设计阶段的页面列表转换为可视化的原型，包括 ASCII 线框图和基于 TDesign 的高保真 HTML 原型，帮助团队直观理解产品界面布局和交互流程。
@@ -275,3 +284,4 @@ trigger:
 ## 异常处理
 - 若 `tdesign-component-helper` 调用失败，报错并建议重试
 - 若用户修改的页面不在列表中，拒绝生成并提示用户核对页面名称
+

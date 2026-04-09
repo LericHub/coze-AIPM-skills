@@ -45,14 +45,16 @@ create_versioned_docs() {
     local version=$1
     local date=$(date +%Y%m%d)
     local version_dir="output/V${version}.0"
+    local draft_dir="draft/V${version}.0_${date}"
     
     # 定义文档文件名
-    NEW_MD_FILE="$version_dir/PREPRD_V${version}.0_${date}.md"
-    NEW_HTML_PROTO_FILE="$version_dir/Pr0totye_V${version}.0_${date}.html"
-    NEW_HTML_PRD_FILE="$version_dir/PRD_V${version}.0_${date}.html"
+    NEW_MD_FILE="$draft_dir/PrePRD_V${version}.0_${date}.md"
+    NEW_HTML_PROTO_FILE="$version_dir/protoIndex_V${version}.0_${date}.html"
+    NEW_HTML_PRD_FILE="$version_dir/html/PRD_V${version}.0_${date}.html"
     
     # 创建文档目录（如果不存在）
     mkdir -p "$version_dir"
+    mkdir -p "$draft_dir"
     
     # 创建新版本的文档
     if [ ! -f "$NEW_MD_FILE" ]; then

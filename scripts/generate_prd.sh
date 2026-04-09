@@ -22,18 +22,28 @@ echo "Generating PRD for $PROJECT_NAME V$VERSION"
 
 # Step 1: Generate overview.html
 echo "Generating overview.html..."
-node "$SCRIPT_DIR/md2html.js" \
-    "$PROJECT_PATH/snapshots/overview.md" \
-    "$OUTPUT_DIR/html/overview.html" \
-    "$SCRIPT_DIR/../templates/overview.html"
+if [ -f "$PROJECT_PATH/CURRENT_SNAPSHOT_DETAIL.md" ]; then
+    node "$SCRIPT_DIR/md2html.js" \
+        "$PROJECT_PATH/CURRENT_SNAPSHOT_DETAIL.md" \
+        "$OUTPUT_DIR/html/overview.html" \
+        "$SCRIPT_DIR/../templates/overview.html"
+else
+    echo "Warning: Snapshot file not found, using template."
+    cp "$SCRIPT_DIR/../templates/overview.html" "$OUTPUT_DIR/html/overview.html"
+fi
 
 # Step 2: Generate final combined PRD
 echo "Generating final PRD document..."
 FINAL_PRD="$OUTPUT_DIR/html/PRD_V${VERSION}_${DATE}.html"
-node "$SCRIPT_DIR/md2html.js" \
-    "$PROJECT_PATH/snapshots/full_prd.md" \
-    "$FINAL_PRD" \
-    "$SCRIPT_DIR/../templates/prd_full.html"
+if [ -f "$PROJECT_PATH/CURRENT_SNAPSHOT_WRITING.md" ]; then
+    node "$SCRIPT_DIR/md2html.js" \
+        "$PROJECT_PATH/CURRENT_SNAPSHOT_WRITING.md" \
+        "$FINAL_PRD" \
+        "$SCRIPT_DIR/../templates/prd_template.html"
+else
+    echo "Warning: Writing snapshot file not found, using template."
+    cp "$SCRIPT_DIR/../templates/prd_template.html" "$FINAL_PRD"
+fi
 
 echo "PRD Generation complete:"
 echo "  Overview: $OUTPUT_DIR/html/overview.html"
