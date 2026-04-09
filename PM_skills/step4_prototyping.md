@@ -1,5 +1,5 @@
 ---
-name: step6_prototyping
+name: step4_prototyping
 description: 原型设计技能。基于详细设计生成 ASCII 线框图（自动展示），并显性调用 coze 搭建的 tdesign-component-helper 技能生成高保真 HTML 原型。
 trigger:
   - 任务进入PROTOTYPING节点
@@ -8,6 +8,11 @@ trigger:
 ---
 
 ## 技能操作步骤
+
+0. **风格参考收集 (可选)**:
+   - **主动询问用户**："在开始生成原型前，您是否有特定的视觉风格参考？您可以上传配置截图、现有页面截图或描述风格偏好（如：简约、科技感、品牌色等）。若无特殊要求，将使用 TDesign 默认风格。"
+   - 若用户提供参考：记录风格要点，作为后续调用 `tdesign-component-helper` 的上下文依据
+   - 若用户无要求：直接进入下一步
 
 1. **CONTEXT_READ**: [CURRENT_SNAPSHOT_DETAIL] (从上下文获取详细设计快照)
    - 解析页面列表，提取每个页面的名称、路径、端口类型(C端/B端)、核心功能模块
@@ -23,12 +28,13 @@ trigger:
    - **必须显性调用 coze 搭建的 `tdesign-component-helper` 技能**
    - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 Helper 技能
    - 生成基于 TDesign 组件库的 HTML/CSS/JS 代码
-   - 输出文件结构:
-     - `index.html`: 项目导航页，列出所有页面链接
-     - `{page_name}.html`: 每个页面对应的独立 HTML 文件
+   - 输出文件结构 (严格遵循 README 目录规范):
+     - 路径: `/AIPM/{project_name}/output/V{version}/`
+     - 主索引文件: `protoIndex_V{version}_{date}.html`
+     - *注：若 Helper 生成多文件（如 `page/home.html` 等），需确保主入口文件命名为 `protoIndex_V{version}_{date}.html` 或在该目录下生成标准的索引文件，以便统一访问*
 
 4. **输出交付物**:
-   - 在消息中展示 `index.html` 的代码片段及所有生成的 HTML 文件路径
+   - 在消息中展示生成的原型文件路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
    - 将生成的 HTML 文件内容/路径写入 [CURRENT_SNAPSHOT_PROTOTYPING] 上下文标签
 
 5. **用户确认与迭代**:
@@ -37,10 +43,14 @@ trigger:
    - 情形B：用户提出修改 → 执行迭代流程
 
 6. **迭代处理流程**:
+   - **风格参考更新 (可选)**:
+     - 若用户在迭代过程中上传了新的风格参考截图或描述了新的风格偏好，需记录并更新风格上下文
+     - 将更新后的风格要点作为后续调用 `tdesign-component-helper` 的参数依据
    - 校验用户提及的页面名称是否在原始页面列表中
    - 重绘对应页面的 ASCII 线框图并在对话中展示
    - 再次**显性调用 `tdesign-component-helper`** 生成修改后的 HTML 代码
-   - 更新本地 HTML 文件，版本号递增（如 v1.0 → v1.1）
+     - **注意**：调用时需包含最新的风格参考信息（如有）
+   - 更新本地 HTML 文件，版本号递增（如 V1.0 → V1.1），主索引文件名为 `protoIndex_V{new_version}_{date}.html`
    - **【强制暂停点】**：等待用户确认修改内容
 
 ## 技能描述
@@ -80,7 +90,7 @@ trigger:
 3. 包含足够的视觉细节便于理解布局
 
 ### 2.2 C端页面模板
-``` markdown
+```
 ### 2.1 首页 `/home`
 
 #### 页面布局
@@ -123,7 +133,7 @@ trigger:
 ```
 
 ### 2.3 B端管理页面模板
-``` markdown
+```
 ### 3.1 活动列表页 `/event_list`
 
 #### 页面布局
@@ -173,7 +183,7 @@ trigger:
 ```
 
 ### 2.4 B端表单页面模板
-``` markdown
+```
 ### 3.2 活动编辑页 `/event_edit`
 
 #### 页面布局

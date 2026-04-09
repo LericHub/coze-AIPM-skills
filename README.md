@@ -206,7 +206,8 @@ WHILE 未到达结束节点:
 ├─ Memory.md                  # 项目状态文件，包含当前节点、快照标签、版本号等信息
 ├─ output/                    # 项目产出目录，存储所有项目产出的所有文件
 │  └─ V{version}/             # 版本目录
+│     ├─ page/home.html       # 存放生成的每一页html
 │     ├─ PREPRD_V{version}_{date}.md    # 项目初始版本的Markdown格式PRD文档
-│     ├─ Pr0totye_V{version}_{date}.html # 项目产出的页面原型
+│     ├─ protoIndex_V{version}_{date}.html # 产出整合页面原型的索引文件
 │     └─ PRD_V{version}_{date}.html     # 项目产出的最终PRD文件
 ```
