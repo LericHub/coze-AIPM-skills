@@ -44,55 +44,36 @@ get_next_version() {
 create_versioned_docs() {
     local version=$1
     local date=$(date +%Y%m%d)
+    local version_dir="output/V${version}.0"
     
     # 定义文档文件名
-    NEW_MD_FILE="Prd_md/V${version}_${date}.md"
-    NEW_HTML_C_FILE="HTML/C端_V${version}_${date}.html"
-    NEW_HTML_B_FILE="HTML/B端_V${version}_${date}.html"
-    NEW_HTML_PRD_FILE="HTML/PRD_V${version}_${date}.html"
+    NEW_MD_FILE="$version_dir/PREPRD_V${version}.0_${date}.md"
+    NEW_HTML_PROTO_FILE="$version_dir/Pr0totye_V${version}.0_${date}.html"
+    NEW_HTML_PRD_FILE="$version_dir/PRD_V${version}.0_${date}.html"
     
     # 创建文档目录（如果不存在）
-    mkdir -p "Prd_md"
-    mkdir -p "HTML"
+    mkdir -p "$version_dir"
     
     # 创建新版本的文档
     if [ ! -f "$NEW_MD_FILE" ]; then
         touch "$NEW_MD_FILE"
-        echo "# 产品需求文档 V$version" > "$NEW_MD_FILE"
+        echo "# 产品需求文档 V${version}.0" > "$NEW_MD_FILE"
         echo "" >> "$NEW_MD_FILE"
         echo "生成时间: $(date)" >> "$NEW_MD_FILE"
     fi
     
-    if [ ! -f "$NEW_HTML_C_FILE" ]; then
-        touch "$NEW_HTML_C_FILE"
-        cat > "$NEW_HTML_C_FILE" << EOF
+    if [ ! -f "$NEW_HTML_PROTO_FILE" ]; then
+        touch "$NEW_HTML_PROTO_FILE"
+        cat > "$NEW_HTML_PROTO_FILE" << EOF
 <!DOCTYPE html>
 <html>
 <head>
-    <title>C端产品需求文档 V$version</title>
+    <title>页面原型 V${version}.0</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <h1>C端产品需求文档 V$version</h1>
-    <p>生成时间: $(date)</p>
-</body>
-</html>
-EOF
-    fi
-    
-    if [ ! -f "$NEW_HTML_B_FILE" ]; then
-        touch "$NEW_HTML_B_FILE"
-        cat > "$NEW_HTML_B_FILE" << EOF
-<!DOCTYPE html>
-<html>
-<head>
-    <title>B端产品需求文档 V$version</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <h1>B端产品需求文档 V$version</h1>
+    <h1>页面原型 V${version}.0</h1>
     <p>生成时间: $(date)</p>
 </body>
 </html>
@@ -105,12 +86,12 @@ EOF
 <!DOCTYPE html>
 <html>
 <head>
-    <title>综合产品需求文档 V$version</title>
+    <title>产品需求文档 V${version}.0</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <h1>综合产品需求文档 V$version</h1>
+    <h1>产品需求文档 V${version}.0</h1>
     <p>生成时间: $(date)</p>
 </body>
 </html>
@@ -121,10 +102,9 @@ EOF
     echo "{\"version\": $version}" > version.json
     
     echo "已创建新版本文档:"
-    echo "- Markdown: $NEW_MD_FILE"
-    echo "- C端 HTML: $NEW_HTML_C_FILE"
-    echo "- B端 HTML: $NEW_HTML_B_FILE"
-    echo "- PRD HTML: $NEW_HTML_PRD_FILE"
+    echo "- Markdown PREPRD: $NEW_MD_FILE"
+    echo "- HTML 原型: $NEW_HTML_PROTO_FILE"
+    echo "- HTML PRD: $NEW_HTML_PRD_FILE"
     echo "当前版本号: $version"
 }
 

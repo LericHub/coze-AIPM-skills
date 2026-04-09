@@ -203,24 +203,10 @@ WHILE 未到达结束节点:
 
 ```
 /AIPM/{project_name}/
-├─ Memory.md                  # 当前状态文件
-├─ Memory.bak.{timestamp}.md  # 自动备份文件
-├─ snapshots/                 # 快照目录
-│  ├─ CLARIFY_{timestamp}.md  # 需求澄清快照
-│  ├─ ANALYSIS_{timestamp}.md # 需求分析快照
-│  ├─ DETAIL_{timestamp}.md   # 详细设计快照
-│  └─ WRITING_{timestamp}.md  # PRD撰写快照
-├─ Prd_md/                    # Markdown格式PRD文档目录
-│  └─ V{version}_{date}.md   # 版本化PRD文档
-├─ HTML/                      # HTML格式PRD文档目录
-│  ├─ C端_V{version}_{date}.html  # C端HTML PRD
-│  ├─ B端_V{version}_{date}.html  # B端HTML PRD
-│  └─ PRD_V{version}_{date}.html  # 综合HTML PRD
-├─ Assets/                    # 资源文件目录
-│  ├─ images/                 # 图片资源
-│  └─ diagrams/               # 图表资源
-├─ Change_Logs/               # 变更日志目录
-│  └─ change_{date}.md       # 变更记录
-└─ Conversation_Logs/         # 会话日志目录
-   └─ log_{date}.md          # 会话记录
+├─ Memory.md                  # 项目状态文件，包含当前节点、快照标签、版本号等信息
+├─ output/                    # 项目产出目录，存储所有项目产出的所有文件
+│  └─ V{version}/             # 版本目录
+│     ├─ PREPRD_V{version}_{date}.md    # 项目初始版本的Markdown格式PRD文档
+│     ├─ Pr0totye_V{version}_{date}.html # 项目产出的页面原型
+│     └─ PRD_V{version}_{date}.html     # 项目产出的最终PRD文件
 ```

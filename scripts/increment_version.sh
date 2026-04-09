@@ -36,23 +36,21 @@ else
 fi
 
 DATE=$(date +%Y%m%d)
-NEW_VERSION_FILE="V${VERSION}_${DATE}.md"
-NEW_HTML_C_FILE="C端_V${VERSION}_${DATE}.html"
-NEW_HTML_B_FILE="B端_V${VERSION}_${DATE}.html"
-NEW_HTML_PRD_FILE="PRD_V${VERSION}_${DATE}.html"
+VERSION_DIR="output/V${VERSION}.0"
+
+# 创建新版本的目录
+mkdir -p "$VERSION_DIR"
 
 # 创建新版本的文档
-touch "Prd_md/$NEW_VERSION_FILE"
-touch "HTML/$NEW_HTML_C_FILE"
-touch "HTML/$NEW_HTML_B_FILE"
-touch "HTML/$NEW_HTML_PRD_FILE"
+touch "$VERSION_DIR/PREPRD_V${VERSION}.0_${DATE}.md"
+touch "$VERSION_DIR/Pr0totye_V${VERSION}.0_${DATE}.html"
+touch "$VERSION_DIR/PRD_V${VERSION}.0_${DATE}.html"
 
 # 更新版本号
 echo "{\"version\": $VERSION}" > version.json
 
 echo "已创建新版本文档:"
-echo "- Markdown: $NEW_VERSION_FILE"
-echo "- C端 HTML: $NEW_HTML_C_FILE"
-echo "- B端 HTML: $NEW_HTML_B_FILE"
-echo "- PRD HTML: $NEW_HTML_PRD_FILE"
+echo "- Markdown: $VERSION_DIR/PREPRD_V${VERSION}.0_${DATE}.md"
+echo "- 原型 HTML: $VERSION_DIR/Pr0totye_V${VERSION}.0_${DATE}.html"
+echo "- PRD HTML: $VERSION_DIR/PRD_V${VERSION}.0_${DATE}.html"
 echo "当前版本号: $VERSION"

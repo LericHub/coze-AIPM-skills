@@ -32,18 +32,15 @@ for file in "${REQUIRED_FILES[@]}"; do
 done
 
 # 检查并创建缺失的目录
-DIRECTORIES=("snapshots" "Prd_md" "HTML" "Assets/images" "Assets/diagrams" "Change_Logs" "Conversation_Logs")
-for dir in "${DIRECTORIES[@]}"; do
-    if [ ! -d "$dir" ]; then
-        echo "创建缺失目录: $dir"
-        mkdir -p "$dir"
-    fi
-done
+VERSION="V1.0"
+DATE=$(date +%Y%m%d)
+mkdir -p "output/$VERSION"
 
 # 检查并创建缺失的基础文件
 FILES_TO_CHECK=(
-    "Change_Logs/change_$(date +%Y%m%d).md"
-    "Conversation_Logs/log_$(date +%Y%m%d).md"
+    "output/$VERSION/PREPRD_${VERSION}_${DATE}.md"
+    "output/$VERSION/Pr0totye_${VERSION}_${DATE}.html"
+    "output/$VERSION/PRD_${VERSION}_${DATE}.html"
 )
 
 for file in "${FILES_TO_CHECK[@]}"; do
@@ -52,11 +49,5 @@ for file in "${FILES_TO_CHECK[@]}"; do
         touch "$file"
     fi
 done
-
-# 检查版本文件是否存在，如果不存在则创建默认版本
-if [ ! -f "version.json" ]; then
-    echo '{"version": 1}' > version.json
-    echo "创建默认版本文件: version.json"
-fi
 
 echo "项目 $PROJECT_NAME 目录结构验证完成"
