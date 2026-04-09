@@ -56,7 +56,7 @@ version: 1.0.0
 - 快照标签内容应包含该节点的关键决策、产出物和重要信息摘要
 - 当节点被重新执行时，对应的快照标签会被新的内容覆盖
 
-## 版本管理
+## 版本管理与节点输出文件定义
 
 ### 文件版本管理
 **只有step3、step4、step5需要产出文件**，文件的版本管理逻辑如下：
@@ -76,6 +76,53 @@ version: 1.0.0
 - B端文档: `web/{页面编号}.html`
 - C端文档: `app/{页面编号}.html`
 - 索引文件: `protoIndex_V{version}_{date}.html`
+
+### 节点输出文件定义
+
+#### 1. 需求澄清节点 (step1_clarify.md)
+- **主要职责**: 从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准
+- **输入来源**: 用户初始需求
+- **处理逻辑**: 接收用户提供的初步需求，通过启发式对话引导用户明确需求，从7个维度评估需求完整性，进行深度追问与多轮确认
+- **输出路径**: CURRENT_SNAPSHOT_CLARIFY (上下文标签)
+
+#### 2. 需求分析节点 (step2_analysis.md)
+- **主要职责**: 构建PRD骨架，识别用户角色、页面清单、埋点方案
+- **输入来源**: [CURRENT_SNAPSHOT_CLARIFY]
+- **处理逻辑**: 读取需求澄清快照内容，生成详细的初步PRD文档，识别用户类型和端口，梳理页面列表和功能，设计埋点方案
+- **输出路径**: `/AIPM/{project_name}/draft/V{version}_{date}/PrePRD_V{version}_{date}.md`
+
+#### 3. 详细设计节点 (step3-detail_design.md)
+- **主要职责**: 细化业务流程，绘制Mermaid流程图，定义数据逻辑
+- **输入来源**: [CURRENT_SNAPSHOT_ANALYSIS]
+- **处理逻辑**: 读取需求分析快照，细化事件列表，绘制业务流程图和页面流程图，整理数据逻辑和异常处理，更新埋点方案
+- **输出路径**: CURRENT_SNAPSHOT_DETAIL (上下文标签)
+
+#### 4. 原型制作节点 (step4_prototyping.md)
+- **主要职责**: 生成ASCII线框图和HTML原型页面，可视化展示产品设计
+- **输入来源**: [CURRENT_SNAPSHOT_DETAIL]
+- **处理逻辑**: 读取详细设计快照，生成ASCII线框图，调用tdesign-component-helper生成HTML原型，整理原型文件结构
+- **输出路径**:
+  - 主索引文件: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
+  - C端原型: `/AIPM/{project_name}/output/V{version}/html/app/`
+  - B端原型: `/AIPM/{project_name}/output/V{version}/html/web/`
+  - 上下文标签: `CURRENT_SNAPSHOT_PROTOTYPING`
+
+#### 5. PRD撰写节点 (step5_prd_writing.md)
+- **主要职责**: 整合所有产出，形成完整PRD文档
+- **输入来源**: [CURRENT_SNAPSHOT_ANALYSIS], [CURRENT_SNAPSHOT_DETAIL], [CURRENT_SNAPSHOT_PROTOTYPING]
+- **处理逻辑**: 读取分析、详细设计和原型快照，生成需求概述页面，转换Markdown为HTML格式，整合HTML原型，生成完整PRD文档
+- **输出路径**:
+  - 完整PRD: `/AIPM/{project_name}/output/V{version}/html/PRD_V{version}_{date}.html`
+  - 概览文档: `/AIPM/{project_name}/output/V{version}/html/overview.html`
+  - C端需求文档: `/AIPM/{project_name}/output/V{version}/doc/app/{page_name}.html`
+  - B端需求文档: `/AIPM/{project_name}/output/V{version}/doc/web/{page_name}.html`
+  - 上下文标签: `CURRENT_SNAPSHOT_WRITING`
+
+#### 6. 变更分析节点 (step6_change_analysis.md)
+- **主要职责**: 独立变更节点，评估变更影响，制定回退策略
+- **输入来源**: [CURRENT_SNAPSHOT_WRITING]
+- **处理逻辑**: 读取PRD撰写快照，按照详细设计格式输出变更分析，评估变更影响范围，制定变更实施方案
+- **输出路径**: CURRENT_SNAPSHOT_CHANGE (上下文标签)
 
 ## 确认机制
 
