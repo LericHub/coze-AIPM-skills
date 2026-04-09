@@ -15,7 +15,7 @@ trigger:
    - 从 [CURRENT_SNAPSHOT_PROTOTYPING] 读取：生成的HTML原型代码文件路径
 
 2. **生成需求概述页面 (overview.html)
-   - 使用 `templates/overview.html` 作为模板
+   - 使用 `../core/overview.html` 作为模板
    - 替换以下占位符：
      - `{{PROJECT_NAME}}` → 项目名称
      - `{{VERSION}}` → 版本号
@@ -48,7 +48,7 @@ trigger:
    - 确保文件名与页面名称对应
 
 5. **生成完整PRD文档 (PRD_V{version}_{date}.html)
-   - 使用 `templates/prd_template.html` 作为模板
+   - 使用 `../core/prd_template.html` 作为模板
    - 整合以下内容：
      - 需求概述部分
      - C端需求设计内容
@@ -98,6 +98,7 @@ trigger:
 | `{{DATE}}` | 日期 | 2026-04-09 |
 | `{{OWNER}}` | 负责人 | 产品经理 |
 | `{{BACKGROUND_CONTENT}}` | 项目背景HTML内容 | `<p>...</p>` |
+| `{{OBJECTIVE_CONTENT}}` | 项目目标HTML内容 | `<ul>...</ul>` |
 | `{{OBJECTIVE_CONTENT}}` | 项目目标HTML内容 | `<ul>...</ul>` |
 | `{{IN_SCOPE}}` | 范围内内容 | `<ul>...</ul>` |
 | `{{OUT_SCOPE}}` | 范围外内容 | `<ul>...</ul>` |
@@ -186,3 +187,6 @@ trigger:
 5. 用户角色表格需要添加对应的标签（C端/B端/管理等）
 6. Markdown 转 HTML 时，**不允许修改内容**，仅做格式转换
 7. 必须兼容 Mermaid 图表，保留原始代码块
+
+## 相关规范
+参考 [../../STATE_RULES.md](../../STATE_RULES.md) 中的上下文快照管理、确认机制和强制规则部分。

@@ -1,539 +1,382 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIPM Skill 工作流程详解</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 20px;
-        }
-        
-        h1 {
-            color: #2c3e50;
-        }
-        
-        .intro {
-            background-color: #e8f5e9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-        }
-        
-        .node {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .node-title {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .node-number {
-            background-color: #fff;
-            color: #4CAF50;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        .node-content {
-            margin-left: 40px;
-        }
-        
-        .node-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .info-card {
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            padding: 10px;
-        }
-        
-        .info-card h4 {
-            margin-top: 0;
-            color: #2c3e50;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-        }
-        
-        .mermaid-diagram {
-            background-color: #f8f9fa;
-            border: 1px solid #eee;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-        
-        .trigger-section {
-            background-color: #e3f2fd;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        
-        .skills-section {
-            background-color: #fff3e0;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-        
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .skill-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #777;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIPM Skill 工作流程详解</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px 0;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    h1 {
+      color: #2c3e50;
+      font-size: 2.2em;
+    }
+    
+    .intro {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #7f8c8d;
+    }
+    
+    .workflow-diagram {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+    .node-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 15px;
+      width: calc(33% - 30px);
+      min-width: 250px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .node-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .node-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .node-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .clarify { background-color: #3498db; }
+    .analysis { background-color: #2ecc71; }
+    .detail { background-color: #e67e22; }
+    .prototyping { background-color: #9b59b6; }
+    .writing { background-color: #1abc9c; }
+    .change { background-color: #e74c3c; }
+    
+    .node-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    .node-description {
+      color: #7f8c8d;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    
+    .node-details {
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    
+    .node-details h4 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    
+    .skills-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .skills-list li {
+      padding: 5px 0;
+      border-bottom: 1px dashed #eee;
+    }
+    
+    .skills-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .arrow {
+      text-align: center;
+      font-size: 24px;
+      color: #7f8c8d;
+      align-self: center;
+    }
+    
+    .trigger-section {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin: 30px 0;
+    }
+    
+    .trigger-section h3 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+    
+    .trigger-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .trigger-item {
+      background-color: #f8f9fa;
+      padding: 12px;
+      border-radius: 5px;
+      border-left: 4px solid #3498db;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eaeaea;
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    
+    @media (max-width: 900px) {
+      .node-card {
+        width: calc(50% - 30px);
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .node-card {
+        width: 100%;
+      }
+      
+      .workflow-diagram {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AIPM - AI 产品经理助手工作流程详解</h1>
-            <p>基于Coze平台构建的全流程产品管理助手，能够将模糊、不完整的需求逐步转化为结构化、可执行的产品需求文档（PRD）</p>
-        </header>
+  <div class="container">
+    <header>
+      <h1>AIPM Skill 工作流程详解</h1>
+      <p class="intro">AI 产品经理助手 - 从模糊需求到结构化PRD的完整链路</p>
+    </header>
 
-        <section class="intro">
-            <h2>项目概述</h2>
-            <p>AI 产品经理助手（AIPM）通过6个核心节点将模糊、不完整的需求转化为结构化、可执行的产品需求文档（PRD）：</p>
-            <ol>
-                <li><strong>需求澄清</strong>：从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准</li>
-                <li><strong>需求分析</strong>：构建PRD骨架，识别用户角色、页面清单、埋点方案</li>
-                <li><strong>详细设计</strong>：细化业务流程，绘制Mermaid流程图，定义数据逻辑</li>
-                <li><strong>原型制作</strong>：生成ASCII线框图和HTML原型页面，可视化展示产品设计</li>
-                <li><strong>PRD撰写</strong>：整合所有产出，形成完整PRD文档</li>
-                <li><strong>变更分析</strong>：独立变更节点，评估变更影响，制定回退策略</li>
-            </ol>
-        </section>
+    <div class="workflow-diagram">
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon clarify">1</div>
+          <h3 class="node-title">需求澄清 (CLARIFY)</h3>
+        </div>
+        <p class="node-description">通过启发式对话引导用户明确需求的背景、目标、系统边界等关键维度</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>用户提供初步需求描述</li>
+            <li>任务进入CLARIFY节点</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>7维评估：背景/痛点、业务目标、系统边界等</li>
+            <li>启发式追问：开放式提问引导用户思考</li>
+            <li>多轮确认：挖掘需求盲点</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>CURRENT_SNAPSHOT_CLARIFY</p>
+        </div>
+      </div>
 
-        <section>
-            <h2>核心节点详细说明</h2>
-            
-            <!-- Node 1: 需求澄清 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">1</span> 需求澄清 (step1_clarify.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>通过启发式对话引导用户明确需求的背景、目标、系统边界、业务规则等关键维度。适用于用户需求描述模糊、不完整的场景。</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>用户初始需求（任意形式输入：一句话、截图、草图、大白话）</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>需求澄清快照 (CURRENT_SNAPSHOT_CLARIFY)</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>7维评估</h5>
-                                <p>对需求进行7个维度的评估：背景/痛点、业务目标、上下游系统边界、接口文档、业务规则、业务风险、埋点场景</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>启发式追问</h5>
-                                <p>抛弃死板选项，采用开放式、启发式提问，引导用户更全面地思考需求，进行1-3轮深度追问</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>多轮确认</h5>
-                                <p>基于用户回答挖掘新盲点继续追问，直到完全理解需求的所有细节并得到用户确认</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>用户提供初步需求描述</li>
-                            <li>任务进入CLARIFY节点</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Node 2: 需求分析 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">2</span> 需求分析 (step2_analysis.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>基于已确认的需求信息，生成初步PRD文档，识别用户类型、业务对象、页面列表和埋点方案</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>[CURRENT_SNAPSHOT_CLARIFY] (需求澄清快照)</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>初步PRD文档（Markdown格式）- 存放于 draft/V{version}_{date}/PrePRD_V{version}_{date}.md</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>PRD骨架构建</h5>
-                                <p>搭建完整文档结构，包含项目基本信息、需求背景与目标、用户类型识别等</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>用户角色分析</h5>
-                                <p>识别用户类型和端口，梳理用户使用产品时的场景和核心流程</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>页面流程设计</h5>
-                                <p>输出B、C端页面流程和页面列表，按页面功能和用户操作维度描述</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>任务进入ANALYSIS节点</li>
-                            <li>需要输出初步PRD框架</li>
-                            <li>需要识别用户类型和端口</li>
-                            <li>需要梳理页面列表和功能</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Node 3: 详细设计 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">3</span> 详细设计 (step3-detail_design.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>细化业务流程、页面流程、数据点位和埋点方案，使用Mermaid绘制可视化流程图</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>[CURRENT_SNAPSHOT_ANALYSIS] (需求分析快照)</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>详细设计文档（包含业务流程图、页面流程图、事件列表等）- CURRENT_SNAPSHOT_DETAIL</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>事件细化</h5>
-                                <p>基于页面列表，细化每个页面的数据点位，说明数据源、处理逻辑、数据输出</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>流程图绘制</h5>
-                                <p>使用Mermaid v10绘制横向流程图，包括业务流程图、页面流程图</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>异常处理</h5>
-                                <p>整理事件中正常和异常场景列表，说明判断方式和处理方案</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>任务进入DETAIL节点</li>
-                            <li>需要细化业务流程图</li>
-                            <li>需要梳理数据点位</li>
-                            <li>需要输出埋点方案</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Node 4: 原型制作 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">4</span> 原型制作 (step4_prototyping.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>基于详细设计生成ASCII线框图，并调用技能生成高保真HTML原型</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>[CURRENT_SNAPSHOT_DETAIL] (详细设计快照)</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>HTML原型代码和索引文件 - output/V{version}/protoIndex_V{version}_{date}.html<br>output/V{version}/html/app/<br>output/V{version}/html/web/</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>ASCII线框图</h5>
-                                <p>为每个页面生成ASCII Art线框图，按C端/B端分类展示</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>B端原型生成</h5>
-                                <p>调用tdesign-component-helper技能生成基于TD设计组件库的HTML原型</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>C端原型生成</h5>
-                                <p>调用ui-ux-pro-max-helper技能生成移动端适配的HTML原型</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>任务进入PROTOTYPING节点</li>
-                            <li>需要输出页面原型</li>
-                            <li>需要展示页面布局</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Node 5: PRD撰写 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">5</span> PRD撰写 (step5_prd_writing.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>整合前序节点产出物，生成完整的PRD文档和可交互的HTML需求展示系统</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>[CURRENT_SNAPSHOT_DETAIL], [CURRENT_SNAPSHOT_PROTOTYPING]</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>完整PRD文档（HTML格式）- output/V{version}/html/PRD_V{version}_{date}.html<br>output/V{version}/html/overview.html</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>内容整合</h5>
-                                <p>整合需求分析、详细设计、原型制作三个节点的所有产出物</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>模板渲染</h5>
-                                <p>使用templates/overview.html和templates/prd_template.html作为模板生成HTML文档</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>格式转换</h5>
-                                <p>将Markdown内容转换为HTML，保留Mermaid图表并兼容渲染</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>任务进入WRITING节点</li>
-                            <li>需要生成最终PRD文档</li>
-                            <li>需要生成可预览的HTML展示系统</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Node 6: 变更分析 -->
-            <div class="node">
-                <h3 class="node-title"><span class="node-number">6</span> 变更分析 (step6_change_analysis.md)</h3>
-                <div class="node-content">
-                    <div class="node-info">
-                        <div class="info-card">
-                            <h4>主要职责</h4>
-                            <p>针对已进入开发阶段的需求进行变更影响评估，输出页面/事件粒度的增量变更方案</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>输入来源</h4>
-                            <p>[CURRENT_SNAPSHOT_WRITING] (PRD撰写快照)</p>
-                        </div>
-                        <div class="info-card">
-                            <h4>产出物</h4>
-                            <p>变更分析报告 - CURRENT_SNAPSHOT_CHANGE</p>
-                        </div>
-                    </div>
-                    
-                    <div class="skills-section">
-                        <h4>核心技能</h4>
-                        <div class="skills-grid">
-                            <div class="skill-card">
-                                <h5>变更识别</h5>
-                                <p>识别变更类型（新增/修改/删除）、影响范围（业务流程/页面交互/数据逻辑/埋点方案）</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>影响评估</h4>
-                                <p>分析变更影响的粒度（整个需求/单个页面/单个事件/单个场景）和风险等级</p>
-                            </div>
-                            <div class="skill-card">
-                                <h5>增量方案</h5>
-                                <p>输出受影响部分的详细变更方案，避免整体回退流程节点</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="trigger-section">
-                        <h4>触发条件</h4>
-                        <ul>
-                            <li>用户提出需求变更</li>
-                            <li>主流程触发变更入口</li>
-                            <li>已确认的PRD需要调整</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="arrow">↓</div>
 
-        <section>
-            <h2>工作流程图</h2>
-            <div class="mermaid-diagram">
-                <pre class="mermaid">
-                    flowchart TD
-                        START([启动]) --> CHECK{存在Memory.md?}
-                        CHECK -->|否| INIT[意图识别 + 方案确认]
-                        CHECK -->|是| RESTORE[恢复状态]
-                        
-                        INIT --> CONFIRM1{用户确认?}
-                        CONFIRM1 -->|否| END1[结束]
-                        CONFIRM1 -->|是| CLARIFY[1.需求澄清]
-                        
-                        RESTORE --> CURRENT[定位当前节点 → 输出AIPM头部]
-                        
-                        CLARIFY --> CONFIRM2{确认?}
-                        CONFIRM2 -->|是| ANALYSIS[2.需求分析]
-                        CONFIRM2 -->|修改| CLARIFY
-                        CONFIRM2 -->|变更| CHANGE[6.变更分析]
-                        
-                        ANALYSIS --> CONFIRM3{确认?}
-                        CONFIRM3 -->|是| DETAIL[3.详细设计]
-                        CONFIRM3 -->|修改| ANALYSIS
-                        CONFIRM3 -->|变更| CHANGE
-                        
-                        DETAIL --> CONFIRM4{确认?}
-                        CONFIRM4 -->|是| PROTOTYPING[4.原型制作]
-                        CONFIRM4 -->|修改| DETAIL
-                        CONFIRM4 -->|变更| CHANGE
-                        
-                        PROTOTYPING --> CONFIRM5{确认?}
-                        CONFIRM5 -->|是| WRITING[5.PRD撰写]
-                        CONFIRM5 -->|修改| PROTOTYPING
-                        CONFIRM5 -->|变更| CHANGE
-                        
-                        WRITING --> DONE[交付完成]
-                        WRITING -->|变更| CHANGE
-                        
-                        CHANGE --> CONFIRM6{确认变更方案?}
-                        CONFIRM6 -->|是| ROLLBACK[回退到受影响节点]
-                        CONFIRM6 -->|否| CURRENT
-                        ROLLBACK --> CURRENT
-                </pre>
-            </div>
-        </section>
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon analysis">2</div>
+          <h3 class="node-title">需求分析 (ANALYSIS)</h3>
+        </div>
+        <p class="node-description">基于已确认的需求信息，生成初步PRD文档</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>任务进入ANALYSIS节点</li>
+            <li>需要输出初步PRD框架</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>PRD骨架构建：搭建完整文档结构</li>
+            <li>用户角色分析：识别用户类型和端口</li>
+            <li>页面流程设计：输出B、C端页面流程</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>draft/V{version}_{date}/PrePRD_V{version}_{date}.md</p>
+        </div>
+      </div>
 
-        <footer>
-            <p>AI 产品经理助手 (AIPM) - 将模糊需求转化为结构化PRD的全流程解决方案</p>
-            <p>© 2026 Coze PM Assistant. All rights reserved.</p>
-        </footer>
+      <div class="arrow">↓</div>
+
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon detail">3</div>
+          <h3 class="node-title">详细设计 (DETAIL)</h3>
+        </div>
+        <p class="node-description">细化业务流程、页面流程、数据点位和埋点方案</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>任务进入DETAIL节点</li>
+            <li>需要细化业务流程图</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>事件细化：细化每个页面的数据点位</li>
+            <li>流程图绘制：使用Mermaid v10绘制流程图</li>
+            <li>异常处理：整理正常和异常场景列表</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>CURRENT_SNAPSHOT_DETAIL</p>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon prototyping">4</div>
+          <h3 class="node-title">原型制作 (PROTOTYPING)</h3>
+        </div>
+        <p class="node-description">基于详细设计生成ASCII线框图和HTML原型页面</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>任务进入PROTOTYPING节点</li>
+            <li>需要输出页面原型</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>ASCII线框图：为每个页面生成线框图</li>
+            <li>B端原型生成：使用TDesign组件库</li>
+            <li>C端原型生成：移动端适配原型</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>output/V{version}/protoIndex_V{version}_{date}.html</p>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon writing">5</div>
+          <h3 class="node-title">PRD撰写 (WRITING)</h3>
+        </div>
+        <p class="node-description">整合前序节点产出物，生成完整的PRD文档</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>任务进入WRITING节点</li>
+            <li>需要生成最终PRD文档</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>内容整合：整合所有节点产出物</li>
+            <li>模板渲染：使用HTML模板生成文档</li>
+            <li>格式转换：Markdown到HTML转换</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>output/V{version}/html/PRD_V{version}_{date}.html</p>
+        </div>
+      </div>
+
+      <div class="node-card">
+        <div class="node-header">
+          <div class="node-icon change">6</div>
+          <h3 class="node-title">变更分析 (CHANGE)</h3>
+        </div>
+        <p class="node-description">针对已进入开发阶段的需求进行变更影响评估</p>
+        <div class="node-details">
+          <h4>触发条件</h4>
+          <ul class="skills-list">
+            <li>用户提出需求变更</li>
+            <li>主流程触发变更入口</li>
+          </ul>
+          
+          <h4>核心技能</h4>
+          <ul class="skills-list">
+            <li>变更识别：识别变更类型和影响范围</li>
+            <li>影响评估：分析变更影响的粒度和风险</li>
+            <li>增量方案：输出受影响部分的变更方案</li>
+          </ul>
+          
+          <h4>输出路径</h4>
+          <p>CURRENT_SNAPSHOT_CHANGE</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Mermaid图表渲染 -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'default',
-            flowchart: { 
-                useMaxWidth: true,
-                curve: 'basis'
-            }
-        });
-    </script>
+    <div class="trigger-section">
+      <h3>主要触发场景</h3>
+      <div class="trigger-list">
+        <div class="trigger-item">
+          <strong>启动新需求</strong>
+          <p>用户提出产品需求时自动启动工作流程</p>
+        </div>
+        <div class="trigger-item">
+          <strong>继续未完成任务</strong>
+          <p>恢复中断的项目，从当前节点继续执行</p>
+        </div>
+        <div class="trigger-item">
+          <strong>提出需求变更</strong>
+          <p>对已有需求进行修改，启动变更分析节点</p>
+        </div>
+        <div class="trigger-item">
+          <strong>节点确认</strong>
+          <p>用户确认当前节点产出，流转到下一节点</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>AI 产品经理助手 (AIPM) - 实现从模糊需求到标准PRD的自动化转化</p>
+      <p>节点文件位于: src/nodes/</p>
+      <p>工具脚本位于: src/utils/</p>
+      <p>模板文件位于: src/templates/</p>
+    </footer>
+  </div>
 </body>
 </html>

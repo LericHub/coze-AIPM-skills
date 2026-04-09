@@ -4,12 +4,51 @@
 
 ## 功能特色
 
-✅ 5节点标准流程：需求澄清 → 需求分析 → 详细设计 → 原型制作 → PRD撰写  
+✅ 6节点标准流程：需求澄清 → 需求分析 → 详细设计 → 原型制作 → PRD撰写 → 变更分析  
 ✅ 独立变更分析节点 - 增量变更无需整体回退  
 ✅ 三级用户确认机制  
 ✅ 完整状态持久化可追溯  
 ✅ 历史版本永久保留  
 ✅ 上下文快照管理 - 确保节点间信息传递的一致性  
+
+## 核心文件
+
+- [SKILL.md](./SKILL.md) - 核心工作流程与节点流转逻辑
+- [STATE_RULES.md](./STATE_RULES.md) - 状态维护、版本管理、确认机制等技术规范
+- [MANUAL.md](./MANUAL.md) - 完整操作手册
+
+## 目录结构
+
+```
+coze-AIPM-skills/
+├── MANUAL.md                # AIPM操作手册
+├── README.md                # 项目说明文档
+├── SKILL.md                 # 主技能文件，包含核心工作流程与节点流转逻辑
+├── STATE_RULES.md           # 状态维护、版本管理、确认机制等技术规范
+├── aipm_skill_flow.html     # AIPM工作流程可视化网页
+├── src/                     # 源代码目录
+│   ├── core/                # 核心逻辑文件
+│   │   ├── overview.html    # 概览页面模板
+│   │   ├── page.html        # 页面模板
+│   │   └── prd_template.html # PRD文档模板
+│   ├── nodes/               # 各节点技能实现
+│   │   ├── step1_clarify.md     # 需求澄清节点
+│   │   ├── step2_analysis.md    # 需求分析节点
+│   │   ├── step3-detail_design.md # 详细设计节点
+│   │   ├── step4_prototyping.md # 原型制作节点
+│   │   ├── step5_prd_writing.md # PRD撰写节点
+│   │   └── step6_change_analysis.md # 变更分析节点
+│   ├── utils/               # 工具脚本
+│   │   ├── generate_docs.sh     # 文档生成脚本
+│   │   ├── generate_prd.sh      # PRD生成脚本
+│   │   ├── increment_version.sh # 版本递增脚本
+│   │   ├── init_project.sh      # 项目初始化脚本
+│   │   └── validate_project.sh  # 项目验证脚本
+│   └── assets/              # 静态资源
+│       ├── delegation.png       # 委托关系图
+│       ├── flow.png             # 流程图
+│       └── image.png            # 其他图片资源
+```
 
 ## 输出目录结构
 
@@ -37,17 +76,6 @@
 
 
 
-## 节点说明
-
-| 节点 | 文件 | 主要职责 | 输入来源 | 产出物 | 输出路径 |
-|------|------|----------|----------|--------|----------|
-| 需求澄清 | step1_clarify.md | 从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准 | 用户初始需求 | 需求澄清快照 | CURRENT_SNAPSHOT_CLARIFY |
-| 需求分析 | step2_analysis.md | 构建PRD骨架，识别用户角色、页面清单、埋点方案 | [CURRENT_SNAPSHOT_CLARIFY] | 初步PRD文档（Markdown格式） | draft/V{version}_{date}/PrePRD_V{version}_{date}.md |
-| 详细设计 | step3-detail_design.md | 细化业务流程，绘制Mermaid流程图，定义数据逻辑 | [CURRENT_SNAPSHOT_ANALYSIS] | 详细设计文档（包含业务流程图、页面流程图、事件列表等） | CURRENT_SNAPSHOT_DETAIL |
-| 原型制作 | step4_prototyping.md | 生成ASCII线框图和HTML原型页面，可视化展示产品设计 | [CURRENT_SNAPSHOT_DETAIL] | HTML原型代码和索引文件 | output/V{version}/protoIndex_V{version}_{date}.html<br>output/V{version}/html/app/<br>output/V{version}/html/web/ |
-| 原型渲染 | step5_prd_writing.md | 整合所有产出，形成完整PRD文档 | [CURRENT_SNAPSHOT_DETAIL], [CURRENT_SNAPSHOT_PROTOTYPING] | 完整PRD文档（HTML格式） | output/V{version}/html/PRD_V{version}_{date}.html<br>output/V{version}/html/overview.html |
-| 变更分析 | step6_change_analysis.md | 独立变更节点，评估变更影响，制定回退策略 | [CURRENT_SNAPSHOT_WRITING] | 变更分析报告 | CURRENT_SNAPSHOT_CHANGE |
-
 ## 使用方法
 
 ```
@@ -63,3 +91,6 @@
 
 发送任意消息自动恢复上次任务进度。
 
+
+# 文件依赖关系
+![alt text](asset/delegation.png)
