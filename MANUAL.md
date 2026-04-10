@@ -28,13 +28,13 @@ triggers:
 - 强制规则
 - 项目脚本说明
 
-### [节点详情](./src/nodes/)
-- [step1_clarify.md](./src/nodes/step1_clarify.md): 需求澄清节点详解
-- [step2_analysis.md](./src/nodes/step2_analysis.md): 需求分析节点详解
-- [step3-detail_design.md](./src/nodes/step3-detail_design.md): 详细设计节点详解
-- [step4_prototyping.md](./src/nodes/step4_prototyping.md): 原型制作节点详解
-- [step5_prd_writing.md](./src/nodes/step5_prd_writing.md): PRD撰写节点详解
-- [step6_change_analysis.md](./src/nodes/step6_change_analysis.md): 变更分析节点详解
+### [节点详情](./references/)
+- [step1_clarify.md](./references/step1_clarify.md): 需求澄清节点详解
+- [step2_analysis.md](./references/step2_analysis.md): 需求分析节点详解
+- [step3-detail_design.md](./references/step3-detail_design.md): 详细设计节点详解
+- [step4_prototyping.md](./references/step4_prototyping.md): 原型制作节点详解
+- [step5_prd_writing.md](./references/step5_prd_writing.md): PRD撰写节点详解
+- [step6_change_analysis.md](./references/step6_change_analysis.md): 变更分析节点详解
 
 ### [使用指南](./README.md)
 - 启动新项目

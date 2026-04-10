@@ -9,50 +9,66 @@ trigger:
 
 ## 技能操作步骤
 
-0. **风格参考收集 (可选)**:
+0. **首次进入节点初始化**:
+   - **创建 output 目录结构**：
+     - 调用 `../scripts/init_output_dir.sh <project_name> <version>` 脚本
+     - 例如：`./scripts/init_output_dir.sh {project_name} V1.0`
+     - 该脚本会自动创建完整的 output 目录结构
+   - **版本管理**：
+     - 从 Memory.md 或 draft/ 目录读取当前版本号
+     - 首次进入节点状态 = `INIT`，版本号为 V1.0
+     - 用户要求修改时状态 = `Draft`，版本号需要迭代
+   - **从 draft 目录获取最新 PrePRD 文件**：
+     - 查找 `/AIPM/{project_name}/draft/` 目录下的所有 `PrePRD_V{version}_{date}.md` 文件
+     - 按版本号和日期排序，获取最新的一个
+     - 将该文件作为节点输入参数之一
+     - 复制该文件到 `/AIPM/{project_name}/output/V{version}/PrePRD_V{version}_{date}.md`
+   - **参考 STATE_RULES.md** 中的文件版本管理逻辑
+
+1. **风格参考收集 (可选)**:
    - **主动询问用户**："在开始生成原型前，您是否有特定的视觉风格参考？您可以上传配置截图、现有页面截图或描述风格偏好（如：简约、科技感、品牌色等）。若无特殊要求，将使用 TDesign 默认风格。"
    - 若用户提供参考：记录风格要点，作为后续调用 `tdesign-component-helper` 的上下文依据
    - 若用户无要求：直接进入下一步
 
-1. **CONTEXT_READ**: [CURRENT_SNAPSHOT_DETAIL] (从上下文获取详细设计快照)
+3. **CONTEXT_READ**: [CURRENT_SNAPSHOT_DETAIL] (从上下文获取详细设计快照)
    - 解析页面列表，提取每个页面的名称、路径、端口类型(C端/B端)、核心功能模块
    - 校验页面列表完整性，确保无遗漏
 
-2. **生成 ASCII 线框图**:
+4. **生成 ASCII 线框图**:
    - 严格按照 [CURRENT_SNAPSHOT_DETAIL] 中的页面列表，为每个页面生成 ASCII Art 线框图
    - 按 C端/B端 分类展示
    - **直接在对话中展示** 所有页面的 ASCII 线框图
    - **此步骤完成后不暂停**，不等待用户确认
 
-3. **生成 HTML 原型**:
+5. **生成 HTML 原型**:
 **按照详细设计文档中的页面列表，生成每一个页面的 HTML 原型，最终通过protoIndex_V{version}_{date}.html整理到一起**
-3.1  **B端原型**
-   - **必须显性调用 coze 搭建的 `tdesign-component-helper` 技能生成与群星**
+5.1  **B端原型**
+   - **必须显性调用 coze 搭建的 `tdesign-component-helper` 技能生成与群星
    - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 `tdesign-component-helper` 技能
    - 生成基于 TDesign 组件库的 HTML/CSS/JS 代码
    - 将生成的 HTML 文件内容写入`/AIPM/{project_name}/output/V{version}/web`目录
-3.2 **C端原型**
-   - **必须显性调用coze中已经搭建的`ui-ux-pro-max-helper`技能生成原型**
+5.2 **C端原型**
+   - **必须显性调用coze中已经搭建的`ui-ux-pro-max-helper`技能生成原型
    - 将 ASCII 线框图结构、页面类型、组件需求作为输入参数传递给 `ui-ux-pro-max-helper` 技能
    - 直接调用大模型能力根据 ASCII 线框图结构生成html原型
    - 将生成的 HTML 文件内容写入`/AIPM/{project_name}/output/V{version}/app`目录
-3.3 **整理并生成索引文件**
-   - 将3.1和3.2生成的html文件整理到一起，生成一个主索引文件
+5.3 **整理并生成索引文件**
+   - 将5.1和5.2生成的html文件整理到一起，生成一个主索引文件
    - 主索引文件上需要显示页面列表和页面链接地址
-   - 文件保存路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
+   - 文件保存路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html
 
-4. **输出交付物**:
-   - 在消息中展示生成的原型文件路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
+6. **输出交付物**:
+   - 在消息中展示生成的原型文件路径: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html
    - 在消息中发送文件
    - 将生成的 HTML 文件内容/路径写入 [CURRENT_SNAPSHOT_PROTOTYPING] 上下文标签
 
-5. **用户确认与迭代**:
+7. **用户确认与迭代**:
    - **【强制暂停点】**：询问用户："以上是根据详细设计生成的页面结构图和 HTML 原型，您看页面布局和交互结构是否符合预期？如需调整，请告知具体页面及修改意见；若无误，请回复'确认'。"
    - 情形A：用户回复"确认" → 结束节点
    - 情形B：用户提出修改 → 执行迭代流程
 
-6. **迭代处理流程**:
-   - **风格参考更新 (可选)**:
+8. **迭代处理流程**:
+   - **风格参考更新 (可选):
      - 若用户在迭代过程中上传了新的风格参考截图或描述了新的风格偏好，需记录并更新风格上下文
      - 将更新后的风格要点作为后续调用 `tdesign-component-helper` 或 `ui-ux-pro-max-helper` 的参数依据
    - 校验用户提及的页面名称是否在原始页面列表中
@@ -60,7 +76,7 @@ trigger:
    - 再次**显性调用 `tdesign-component-helper`或者`ui-ux-pro-max-helper`** 生成修改后的 HTML 代码
      - **注意**：调用时需包含最新的风格参考信息（如有）
    - **【强制暂停点】**：等待用户确认修改内容,用户确认后重新生成相应页面的 HTML 原型并更新索引文件。
-   - 版本维护方式参考`../../STATE_RULES.md`
+   - 版本维护方式参考`../STATE_RULES.md`
 
 ## 技能描述
 本技能负责将详细设计阶段的页面列表转换为可视化的原型，包括 ASCII 线框图和基于 TDesign 的高保真 HTML 原型，帮助团队直观理解产品界面布局和交互流程。
@@ -286,4 +302,4 @@ trigger:
 - 若用户修改的页面不在列表中，拒绝生成并提示用户核对页面名称
 
 ## 相关规范
-参考 [../../STATE_RULES.md](../../STATE_RULES.md) 中的上下文快照管理、确认机制和强制规则部分。
+参考 [../STATE_RULES.md](../STATE_RULES.md) 中的上下文快照管理、确认机制和强制规则部分。

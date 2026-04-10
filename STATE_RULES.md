@@ -75,54 +75,127 @@ version: 1.0.0
 - 概览文档: `overview.html`
 - B端文档: `web/{页面编号}.html`
 - C端文档: `app/{页面编号}.html`
+- 交互式PRD查看器: `index.html` (主入口，左图右文布局)
 - 索引文件: `protoIndex_V{version}_{date}.html`
 
-### 节点输出文件定义
+### 节点输入输出文件定义
 
 #### 1. 需求澄清节点 (step1_clarify.md)
 - **主要职责**: 从7个维度深度挖掘需求背景、目标、边界、用户、场景、竞品、验收标准
-- **输入来源**: 用户初始需求
+- **输入来源**: 
+  - 用户初始需求（纯文本对话输入）
 - **处理逻辑**: 接收用户提供的初步需求，通过启发式对话引导用户明确需求，从7个维度评估需求完整性，进行深度追问与多轮确认
 - **输出路径**: CURRENT_SNAPSHOT_CLARIFY (上下文标签)
+- **输出内容** (CURRENT_SNAPSHOT_CLARIFY):
+  - 需求背景描述
+  - 项目目标清单
+  - 范围边界（包含/不包含）
+  - 用户角色定义
+  - 使用场景描述
+  - 竞品分析
+  - 验收标准
 
 #### 2. 需求分析节点 (step2_analysis.md)
 - **主要职责**: 构建PRD骨架，识别用户角色、页面清单、埋点方案
-- **输入来源**: [CURRENT_SNAPSHOT_CLARIFY]
+- **输入来源**: 
+  - [CURRENT_SNAPSHOT_CLARIFY] 上下文标签
+  - 需求澄清的完整产出物
+- **输入内容** (CURRENT_SNAPSHOT_CLARIFY):
+  - 需求背景、目标、边界
+  - 用户角色、场景、竞品、验收标准
 - **处理逻辑**: 读取需求澄清快照内容，生成详细的初步PRD文档，识别用户类型和端口，梳理页面列表和功能，设计埋点方案
 - **输出路径**: `/AIPM/{project_name}/draft/V{version}_{date}/PrePRD_V{version}_{date}.md`
+- **输出内容** (PrePRD 文件):
+  - 项目基本信息
+  - 需求背景
+  - 项目目标
+  - 范围边界
+  - 用户角色定义
+  - 页面清单（分端口）
+  - FullPicture 业务流程及功能说明（分端口、分页面）
+  - 埋点方案
 
 #### 3. 详细设计节点 (step3-detail_design.md)
 - **主要职责**: 细化业务流程，绘制Mermaid流程图，定义数据逻辑
-- **输入来源**: [CURRENT_SNAPSHOT_ANALYSIS]
+- **输入来源**: 
+  - [CURRENT_SNAPSHOT_ANALYSIS] 上下文标签
+  - PrePRD 文件内容
+- **输入内容** (CURRENT_SNAPSHOT_ANALYSIS + PrePRD):
+  - 完整的 PrePRD 文档
+  - 各页面的功能说明
+  - 用户角色和业务流程
 - **处理逻辑**: 读取需求分析快照，细化事件列表，绘制业务流程图和页面流程图，整理数据逻辑和异常处理，更新埋点方案
 - **输出路径**: CURRENT_SNAPSHOT_DETAIL (上下文标签)
+- **输出内容** (CURRENT_SNAPSHOT_DETAIL):
+  - 各页面的事件列表
+  - 业务流程图（Mermaid）
+  - 页面流程图（Mermaid）
+  - 数据处理逻辑
+  - 异常场景处理
+  - 更新后的埋点方案
 
 #### 4. 原型制作节点 (step4_prototyping.md)
 - **主要职责**: 生成ASCII线框图和HTML原型页面，可视化展示产品设计
-- **输入来源**: [CURRENT_SNAPSHOT_DETAIL]
+- **输入来源**: 
+  - [CURRENT_SNAPSHOT_DETAIL] 上下文标签
+  - PrePRD 文件（作为补充参考）
+- **输入内容** (CURRENT_SNAPSHOT_DETAIL):
+  - 各页面的事件列表
+  - 页面元素定义
+  - 交互流程说明
 - **处理逻辑**: 读取详细设计快照，生成ASCII线框图，调用tdesign-component-helper生成HTML原型，整理原型文件结构
 - **输出路径**:
   - 主索引文件: `/AIPM/{project_name}/output/V{version}/protoIndex_V{version}_{date}.html`
   - C端原型: `/AIPM/{project_name}/output/V{version}/html/app/`
   - B端原型: `/AIPM/{project_name}/output/V{version}/html/web/`
   - 上下文标签: `CURRENT_SNAPSHOT_PROTOTYPING`
+- **输出内容** (CURRENT_SNAPSHOT_PROTOTYPING):
+  - HTML 原型文件路径列表
+  - C端原型文件目录
+  - B端原型文件目录
 
 #### 5. PRD撰写节点 (step5_prd_writing.md)
 - **主要职责**: 整合所有产出，形成完整PRD文档
-- **输入来源**: [CURRENT_SNAPSHOT_ANALYSIS], [CURRENT_SNAPSHOT_DETAIL], [CURRENT_SNAPSHOT_PROTOTYPING]
+- **输入来源**: 
+  - [CURRENT_SNAPSHOT_ANALYSIS] 上下文标签
+  - [CURRENT_SNAPSHOT_DETAIL] 上下文标签
+  - [CURRENT_SNAPSHOT_PROTOTYPING] 上下文标签
+  - PrePRD 文件（从 output/ 读取最新版本）
+- **输入内容**:
+  - CURRENT_SNAPSHOT_ANALYSIS: 项目背景、目标、用户角色、页面清单
+  - CURRENT_SNAPSHOT_DETAIL: 业务流程图、页面流程图、数据逻辑
+  - CURRENT_SNAPSHOT_PROTOTYPING: HTML 原型文件路径
+  - PrePRD 文件: FullPicture 章节内容
 - **处理逻辑**: 读取分析、详细设计和原型快照，生成需求概述页面，转换Markdown为HTML格式，整合HTML原型，生成完整PRD文档
 - **输出路径**:
+  - 交互式 PRD 查看器: `/AIPM/{project_name}/output/V{version}/index.html` (主入口，左图右文布局)
   - 完整PRD: `/AIPM/{project_name}/output/V{version}/html/PRD_V{version}_{date}.html`
   - 概览文档: `/AIPM/{project_name}/output/V{version}/html/overview.html`
   - C端需求文档: `/AIPM/{project_name}/output/V{version}/doc/app/{page_name}.html`
   - B端需求文档: `/AIPM/{project_name}/output/V{version}/doc/web/{page_name}.html`
+  - C端原型: `/AIPM/{project_name}/output/V{version}/app/`
+  - B端原型: `/AIPM/{project_name}/output/V{version}/web/`
   - 上下文标签: `CURRENT_SNAPSHOT_WRITING`
+- **输出内容** (CURRENT_SNAPSHOT_WRITING):
+  - 所有生成的 HTML 文件路径
+  - 交互式 PRD 查看器路径
+  - 完整 PRD 文档路径
 
 #### 6. 变更分析节点 (step6_change_analysis.md)
 - **主要职责**: 独立变更节点，评估变更影响，制定回退策略
-- **输入来源**: [CURRENT_SNAPSHOT_WRITING]
+- **输入来源**: 
+  - [CURRENT_SNAPSHOT_WRITING] 上下文标签
+  - 用户变更需求
+- **输入内容** (CURRENT_SNAPSHOT_WRITING):
+  - 完整的 PRD 产出物
+  - 所有页面文档和原型
+  - 项目当前状态
 - **处理逻辑**: 读取PRD撰写快照，按照详细设计格式输出变更分析，评估变更影响范围，制定变更实施方案
 - **输出路径**: CURRENT_SNAPSHOT_CHANGE (上下文标签)
+- **输出内容** (CURRENT_SNAPSHOT_CHANGE):
+  - 变更影响范围评估
+  - 变更实施方案
+  - 回退策略
 
 ## 确认机制
 
@@ -146,7 +219,7 @@ version: 1.0.0
 
 ```
 # 执行项目初始化脚本
-./src/utils/init_project.sh <project_name>
+./scripts/init_project.sh <project_name>
 ```
 
 此脚本将:
@@ -161,7 +234,7 @@ version: 1.0.0
 
 ```
 # 执行项目验证脚本
-./src/utils/validate_project.sh <project_name>
+./scripts/validate_project.sh <project_name>
 ```
 
 此脚本将:
@@ -175,7 +248,7 @@ version: 1.0.0
 
 ```
 # 递增项目版本并生成新文档
-./src/utils/increment_version.sh <project_name>
+./scripts/increment_version.sh <project_name>
 ```
 
 此脚本将:

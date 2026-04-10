@@ -21,12 +21,12 @@ triggers:
 ✅ 上下文快照管理 - 确保节点间信息传递的一致性
 
 ## 6大核心节点
-1. **CLARIFY** ([src/nodes/step1_clarify.md](./src/nodes/step1_clarify.md)): 需求澄清，从7个维度深度挖掘需求
-2. **ANALYSIS** ([src/nodes/step2_analysis.md](./src/nodes/step2_analysis.md)): 需求分析，构建PRD骨架
-3. **DETAIL** ([src/nodes/step3-detail_design.md](./src/nodes/step3-detail_design.md)): 详细设计，细化业务流程和数据逻辑
-4. **PROTOTYPING** ([src/nodes/step4_prototyping.md](./src/nodes/step4_prototyping.md)): 原型制作，生成可视化原型
-5. **WRITING** ([src/nodes/step5_prd_writing.md](./src/nodes/step5_prd_writing.md)): PRD撰写，整合所有产出形成完整文档
-6. **CHANGE** ([src/nodes/step6_change_analysis.md](./src/nodes/step6_change_analysis.md)): 变更分析，处理需求变更
+1. **CLARIFY** ([references/step1_clarify.md](./references/step1_clarify.md)): 需求澄清，从7个维度深度挖掘需求
+2. **ANALYSIS** ([references/step2_analysis.md](./references/step2_analysis.md)): 需求分析，构建PRD骨架
+3. **DETAIL** ([references/step3-detail_design.md](./references/step3-detail_design.md)): 详细设计，细化业务流程和数据逻辑
+4. **PROTOTYPING** ([references/step4_prototyping.md](./references/step4_prototyping.md)): 原型制作，生成可视化原型
+5. **WRITING** ([references/step5_prd_writing.md](./references/step5_prd_writing.md)): PRD撰写，整合所有产出形成完整文档
+6. **CHANGE** ([references/step6_change_analysis.md](./references/step6_change_analysis.md)): 变更分析，处理需求变更
 
 ---
 
@@ -78,12 +78,12 @@ flowchart LR
 ## 节点映射表
 | 节点 | 顺序 | 子Skill文件 | 确认后流转 |
 |------|-------------|-------------|------------|
-| CLARIFY | 0 | [src/nodes/step1_clarify.md](./src/nodes/step1_clarify.md) | ANALYSIS |
-| ANALYSIS | 1 | [src/nodes/step2_analysis.md](./src/nodes/step2_analysis.md) | DETAIL |
-| DETAIL | 2 | [src/nodes/step3-detail_design.md](./src/nodes/step3-detail_design.md) | PROTOTYPING |
-| PROTOTYPING | 3 | [src/nodes/step4_prototyping.md](./src/nodes/step4_prototyping.md) | WRITING |
-| WRITING | 4 | [src/nodes/step5_prd_writing.md](./src/nodes/step5_prd_writing.md) | DONE |
-| CHANGE | - | [src/nodes/step6_change_analysis.md](./src/nodes/step6_change_analysis.md) | 回退到指定节点 |
+| CLARIFY | 0 | [references/step1_clarify.md](./references/step1_clarify.md) | ANALYSIS |
+| ANALYSIS | 1 | [references/step2_analysis.md](./references/step2_analysis.md) | DETAIL |
+| DETAIL | 2 | [references/step3-detail_design.md](./references/step3-detail_design.md) | PROTOTYPING |
+| PROTOTYPING | 3 | [references/step4_prototyping.md](./references/step4_prototyping.md) | WRITING |
+| WRITING | 4 | [references/step5_prd_writing.md](./references/step5_prd_writing.md) | DONE |
+| CHANGE | - | [references/step6_change_analysis.md](./references/step6_change_analysis.md) | 回退到指定节点 |
 
 ---
 
