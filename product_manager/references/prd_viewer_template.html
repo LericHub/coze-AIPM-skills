@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PROJECT_NAME}} - 产品需求文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0052D9;
+            --primary-light: #E6F7FF;
+            --primary-dark: #0040AA;
+            --success: #00B42A;
+            --warning: #FF7D00;
+            --danger: #F53F3F;
+            --gray-1: #F7F8FA;
+            --gray-2: #E5E6EB;
+            --gray-3: #C9CDD4;
+            --gray-4: #86909C;
+            --gray-5: #4E5969;
+            --gray-6: #1D2129;
+            --text-primary: #1D2129;
+            --text-secondary: #4E5969;
+            --text-tertiary: #86909C;
+            --white: #FFFFFF;
+            --bg-body: #F7F8FA;
+            --bg-card: #FFFFFF;
+            --bg-hover: #F2F3F5;
+            --border: #E5E6EB;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'Noto Sans JP', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-body);
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .sidebar-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: var(--white);
+            border: 1px solid var(--border);
+        }
+        
+        .sidebar-header-content {
+            flex: 1;
+        }
+        
+        .project-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 2px;
+        }
+        
+        .project-version {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .menu-section {
+            margin-bottom: 24px;
+        }
+        
+        .menu-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 8px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border: 1px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+        
+        .menu-item.active {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+            color: var(--primary-dark);
+            font-weight: 500;
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0, 82, 217, 0.1);
+        }
+        
+        .menu-item-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .menu-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-card);
+        }
+        
+        .content-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+        
+        .content-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .content-body {
+            flex: 1;
+            overflow: hidden;
+            background: var(--bg-body);
+        }
+        
+        .single-view {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .split-view {
+            display: flex;
+            height: 100%;
+        }
+        
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-card);
+        }
+        
+        .panel-left {
+            border-right: 1px solid var(--border);
+        }
+        
+        .panel-header {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--gray-1) 0%, var(--white) 100%);
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img class="sidebar-logo" src="assets/image.png" alt="Logo" onerror="this.style.display='none'">
+                <div class="sidebar-header-content">
+                    <div class="project-title">{{PROJECT_NAME}}</div>
+                    <div class="project-version">版本 {{VERSION}} | {{DATE}}</div>
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <div class="menu-section">
+                    <div class="menu-section-title">总览</div>
+                    <div class="menu-item active" data-page="overview">
+                        <span class="menu-item-icon">📋</span>
+                        <span>需求概述</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">C端页面</div>
+                    {{C_END_MENU_ITEMS}}
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">B端页面</div>
+                    {{B_END_MENU_ITEMS}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-title" id="page-title">需求概述</div>
+            </div>
+            <div class="content-body" id="content-body">
+                <div class="single-view" id="single-view">
+                    <iframe class="iframe-container" id="content-iframe" src="html/overview.html"></iframe>
+                </div>
+                <div class="split-view" id="split-view" style="display: none;">
+                    <div class="panel panel-left">
+                        <div class="panel-header">
+                            <span>🎨</span> 原型预览
+                        </div>
+                        <div class="panel-content">
+                            <iframe class="iframe-container" id="prototype-iframe"></iframe>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span>📄</span> 需求文档
+                        </div>
+                        <div class="panel-content">
+                            <iframe class="iframe-container" id="document-iframe"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const menuItems = document.querySelectorAll('.menu-item');
+        const pageTitle = document.getElementById('page-title');
+        const singleView = document.getElementById('single-view');
+        const splitView = document.getElementById('split-view');
+        const contentIframe = document.getElementById('content-iframe');
+        const prototypeIframe = document.getElementById('prototype-iframe');
+        const documentIframe = document.getElementById('document-iframe');
+        
+        let currentPage = 'overview';
+        
+        // {{PAGE_DATA}} 占位符将被 skill 替换为真实数据
+        // 注意：当模板独立打开时，以下为示例数据
+        let currentPageData = {
+            "overview": {"title": "需求概述"},
+            "home": {
+                "title": "首页",
+                "prototypePath": "app/home.html",
+                "docPath": "doc/app/home.html"
+            },
+            "product_list": {
+                "title": "商品列表页",
+                "prototypePath": "app/product_list.html",
+                "docPath": "doc/app/product_list.html"
+            },
+            "product_detail": {
+                "title": "商品详情页",
+                "prototypePath": "app/product_detail.html",
+                "docPath": "doc/app/product_detail.html"
+            },
+            "cart": {
+                "title": "购物车页",
+                "prototypePath": "app/cart.html",
+                "docPath": "doc/app/cart.html"
+            },
+            "order_admin": {
+                "title": "订单管理页",
+                "prototypePath": "web/order_admin.html",
+                "docPath": "doc/web/order_admin.html"
+            }
+        };
+        
+        function loadPage(pageKey) {
+            currentPage = pageKey;
+            const pageData = currentPageData[pageKey];
+            
+            if (!pageData) return;
+            
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === pageKey) {
+                    item.classList.add('active');
+                }
+            });
+            
+            pageTitle.textContent = pageData.title;
+            
+            if (pageKey === 'overview') {
+                singleView.style.display = 'block';
+                splitView.style.display = 'none';
+                contentIframe.src = 'html/overview.html';
+            } else {
+                singleView.style.display = 'none';
+                splitView.style.display = 'flex';
+                prototypeIframe.src = pageData.prototypePath;
+                documentIframe.src = pageData.docPath;
+            }
+        }
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                loadPage(item.dataset.page);
+            });
+        });
+    </script>
+</body>
+</html>
