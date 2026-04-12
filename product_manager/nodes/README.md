@@ -44,5 +44,5 @@ AIPM Skill 节点文件目录
 - detail ✓ → manage.update_node_status + manage.transition_to_next_node
 - prototyping ✓ → manage.update_node_status + manage.transition_to_next_node
 - writing ✓ → manage.update_node_status + manage.transition_to_next_node
-- change ✓ → manage.update_node_status + manage.return_to_trigger_node
+- change ✓ → manage.update_node_status + manage.transition_to_first_affected_node
 ✓ = 用户已确认
