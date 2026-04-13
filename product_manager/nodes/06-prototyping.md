@@ -12,7 +12,7 @@ description: 原型设计技能。基于详细设计生成 ASCII 线框图（自
 - HTML 原型生成（tdesign-component-helper）
 - 使用 Design Reference Skill 和 TDesign MCP Skill 确定页面风格和组件
 - 实时打印要求
-- 禁止后台任务规范
+- **禁止后台任务规范**：本节点必须在前台运行，逐个页面生成以便实时展示和用户确认
 - 逐个页面生成规范
 
 ---
@@ -50,21 +50,23 @@ description: 原型设计技能。基于详细设计生成 ASCII 线框图（自
 
 ## 输出文件
 
-- 文件名: `proto_index.html` + `page_{page_name}.html`
-- 路径: `./output/V{version}/prototyping/`
-  - `proto_index.html`: 原型索引页面
+- 文件名: `page_{page_name}.html`
+- 路径: `./output/V{version}/prototyping/{platform}/`
+  - 平台子目录: `app/` (C端页面) / `web/` (B端页面)
   - `page_{page_name}.html`: 各页面原型文件
 - 生成规则: 见 [01-router.md](01-router.md) 中的文件生成规则
+- **注意**: 必须按平台归属分别存放到 app/ 或 web/ 子目录
 
 ---
 
 ## 完成后
 
-1. 保存产出到文件：`./output/V{version}/prototyping/` 目录
+1. 保存产出到文件：`./output/V{version}/prototyping/` 目录（按 app/web 分端存放）
 2. 调用 manage.update_node_output("prototyping", "output/V{version}/prototyping/")
 3. 展示产出摘要
 4. 等待用户确认
-5. 确认后 → 调用 manage.update_node_status("prototyping", "CONFIRM")
-6. 确认后 → 调用 manage.transition_to_next_node()
-7. 确认后 → 调用 manage.persist_memory()
-8. 进入下一节点
+5. 确认后 → 打包输出目录：`zip -r output/{project_name}_V{version}_output_{YYYYMMDD_HHmm}.zip output/V{version}/`
+6. 确认后 → 调用 manage.update_node_status("prototyping", "CONFIRM")
+7. 确认后 → 调用 manage.transition_to_next_node()
+8. 确认后 → 调用 manage.persist_memory()
+9. 进入下一节点
