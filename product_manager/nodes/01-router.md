@@ -101,7 +101,7 @@ output/V{version}/
 │   ├── proto_index.html
 │   └── page_{page_name}.html
 └── writing/
-    ├── PRD_index.html
+    ├── index.html
     └── overview.html
 ```
 

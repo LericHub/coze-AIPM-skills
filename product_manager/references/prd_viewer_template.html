@@ -13,35 +13,21 @@
         
         :root {
             --primary: #0052D9;
-            --primary-light: #E6F7FF;
-            --primary-dark: #0040AA;
-            --success: #00B42A;
-            --warning: #FF7D00;
-            --danger: #F53F3F;
-            --gray-1: #F7F8FA;
-            --gray-2: #E5E6EB;
-            --gray-3: #C9CDD4;
-            --gray-4: #86909C;
-            --gray-5: #4E5969;
-            --gray-6: #1D2129;
-            --text-primary: #1D2129;
-            --text-secondary: #4E5969;
-            --text-tertiary: #86909C;
+            --primary-light: #F2F3FF;
+            --gray-1: #F3F3F3;
+            --gray-3: #E7E7E7;
+            --gray-4: #DCDCDC;
+            --text-primary: rgba(0, 0, 0, 0.9);
+            --text-secondary: rgba(0, 0, 0, 0.6);
+            --text-placeholder: rgba(0, 0, 0, 0.4);
             --white: #FFFFFF;
-            --bg-body: #F7F8FA;
-            --bg-card: #FFFFFF;
-            --bg-hover: #F2F3F5;
-            --border: #E5E6EB;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'Noto Sans JP', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Anonymous Pro', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
             font-size: 14px;
-            line-height: 1.6;
             color: var(--text-primary);
-            background: var(--bg-body);
+            background: var(--white);
             height: 100vh;
             overflow: hidden;
         }
@@ -49,143 +35,140 @@
         .app-container {
             display: flex;
             height: 100vh;
+            width: 100vw;
         }
         
         .sidebar {
-            width: 280px;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
+            width: 232px;
+            background: var(--white);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow);
+            flex-shrink: 0;
+            border-right: 1px solid var(--gray-3);
         }
         
         .sidebar-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+            height: 56px;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--gray-3);
             display: flex;
             align-items: center;
-            gap: 12px;
         }
         
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            height: 28px;
             object-fit: contain;
-            background: var(--white);
-            border: 1px solid var(--border);
-        }
-        
-        .sidebar-header-content {
-            flex: 1;
-        }
-        
-        .project-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 2px;
-        }
-        
-        .project-version {
-            font-size: 12px;
-            color: var(--text-tertiary);
         }
         
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .version-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .group-title {
+            font-size: 12px;
+            color: var(--text-placeholder);
+            padding: 0 16px 4px 16px;
+        }
+        
+        .dropdown {
+            border: 0.5px solid var(--gray-4);
+            border-radius: 6px;
+            padding: 6px;
+            background: var(--white);
+            margin: 0 8px;
+        }
+
+        .dropdown-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .dropdown-text {
+            font-size: 14px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .menu-section {
-            margin-bottom: 24px;
-        }
-        
-        .menu-section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            padding-left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
         
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
-            border-radius: 8px;
+            padding: 7px 16px;
+            border-radius: 3px;
             cursor: pointer;
-            margin-bottom: 4px;
-            transition: all 0.2s ease;
-            color: var(--text-secondary);
-            font-size: 14px;
-            border: 1px solid transparent;
-        }
-        
-        .menu-item:hover {
-            background: var(--bg-hover);
             color: var(--text-primary);
-            border-color: var(--border);
+        }
+
+        .menu-item-sub {
+            padding: 7px 16px 7px 44px;
+            color: var(--text-secondary);
+            border-radius: 3px;
+            cursor: pointer;
         }
         
-        .menu-item.active {
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
-            color: var(--primary-dark);
-            font-weight: 500;
-            border-color: var(--primary);
-            box-shadow: 0 2px 4px rgba(0, 82, 217, 0.1);
+        .menu-item:hover, .menu-item-sub:hover {
+            background: var(--gray-1);
+        }
+        
+        .menu-item.active, .menu-item-sub.active {
+            background: var(--primary-light);
+            color: var(--primary);
         }
         
         .menu-item-icon {
             width: 20px;
             height: 20px;
-            margin-right: 10px;
+            margin-right: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
         }
         
-        .menu-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 16px 0;
-        }
-        
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: var(--gray-1);
             overflow: hidden;
-            background: var(--bg-card);
         }
         
         .content-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
+            height: 56px;
             background: var(--white);
+            border-bottom: 1px solid var(--gray-3);
+            flex-shrink: 0;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-        }
-        
-        .content-title {
-            font-size: 18px;
+            padding: 0 24px;
             font-weight: 600;
-            color: var(--text-primary);
         }
         
         .content-body {
             flex: 1;
+            display: flex;
             overflow: hidden;
-            background: var(--bg-body);
         }
         
         .single-view {
@@ -195,6 +178,7 @@
         
         .split-view {
             display: flex;
+            width: 100%;
             height: 100%;
         }
         
@@ -202,28 +186,10 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            background: var(--bg-card);
-        }
-        
-        .panel-left {
-            border-right: 1px solid var(--border);
-        }
-        
-        .panel-header {
-            padding: 12px 16px;
-            background: linear-gradient(135deg, var(--gray-1) 0%, var(--white) 100%);
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .panel-content {
-            flex: 1;
+            background: var(--white);
+            margin: 0;
+            border-radius: 0;
+            border: none;
             overflow: hidden;
         }
         
@@ -240,56 +206,56 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <img class="sidebar-logo" src="assets/image.png" alt="Logo" onerror="this.style.display='none'">
-                <div class="sidebar-header-content">
-                    <div class="project-title">{{PROJECT_NAME}}</div>
-                    <div class="project-version">版本 {{VERSION}} | {{DATE}}</div>
-                </div>
             </div>
             <div class="sidebar-content">
+                <div class="version-selector">
+                    <div class="group-title">选择需求版本</div>
+                    <div class="dropdown">
+                        <div class="dropdown-inner">
+                            <span class="dropdown-text">版本 {{VERSION}}</span>
+                            <span>▼</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="menu-section">
-                    <div class="menu-section-title">总览</div>
+                    <div class="group-title" style="margin-top: 16px;">项目需求</div>
                     <div class="menu-item active" data-page="overview">
-                        <span class="menu-item-icon">📋</span>
+                        <span class="menu-item-icon">📄</span>
                         <span>需求概述</span>
                     </div>
                 </div>
                 
                 <div class="menu-section">
-                    <div class="menu-section-title">C端页面</div>
+                    <div class="menu-item">
+                        <span class="menu-item-icon">📱</span>
+                        <span>小程序端页面需求</span>
+                    </div>
                     {{C_END_MENU_ITEMS}}
                 </div>
                 
                 <div class="menu-section">
-                    <div class="menu-section-title">B端页面</div>
+                    <div class="menu-item">
+                        <span class="menu-item-icon">💻</span>
+                        <span>管理端页面需求</span>
+                    </div>
                     {{B_END_MENU_ITEMS}}
                 </div>
             </div>
         </div>
         
         <div class="main-content">
-            <div class="content-header">
-                <div class="content-title" id="page-title">需求概述</div>
-            </div>
+            <div class="content-header" id="page-title" style="display: none;">需求概述</div>
             <div class="content-body" id="content-body">
                 <div class="single-view" id="single-view">
                     <iframe class="iframe-container" id="content-iframe" src="html/overview.html"></iframe>
                 </div>
                 <div class="split-view" id="split-view" style="display: none;">
-                    <div class="panel panel-left">
-                        <div class="panel-header">
-                            <span>🎨</span> 原型预览
-                        </div>
-                        <div class="panel-content">
-                            <iframe class="iframe-container" id="prototype-iframe"></iframe>
-                        </div>
+                    <div class="panel" style="border-right: 1px solid var(--gray-3);">
+                        <iframe class="iframe-container" id="prototype-iframe"></iframe>
                     </div>
                     <div class="panel">
-                        <div class="panel-header">
-                            <span>📄</span> 需求文档
-                        </div>
-                        <div class="panel-content">
-                            <iframe class="iframe-container" id="document-iframe"></iframe>
-                        </div>
+                        <iframe class="iframe-container" id="document-iframe"></iframe>
                     </div>
                 </div>
             </div>
@@ -297,7 +263,7 @@
     </div>
     
     <script>
-        const menuItems = document.querySelectorAll('.menu-item');
+        const menuItems = document.querySelectorAll('.menu-item-sub, .menu-item[data-page="overview"]');
         const pageTitle = document.getElementById('page-title');
         const singleView = document.getElementById('single-view');
         const splitView = document.getElementById('split-view');
@@ -313,27 +279,20 @@
             "overview": {"title": "需求概述"},
             "home": {
                 "title": "首页",
-                "prototypePath": "app/home.html",
+                "platform": "app",
+                "prototypePath": "../prototyping/page_home.html",
                 "docPath": "doc/app/home.html"
             },
             "product_list": {
                 "title": "商品列表页",
-                "prototypePath": "app/product_list.html",
+                "platform": "app",
+                "prototypePath": "../prototyping/page_product_list.html",
                 "docPath": "doc/app/product_list.html"
-            },
-            "product_detail": {
-                "title": "商品详情页",
-                "prototypePath": "app/product_detail.html",
-                "docPath": "doc/app/product_detail.html"
-            },
-            "cart": {
-                "title": "购物车页",
-                "prototypePath": "app/cart.html",
-                "docPath": "doc/app/cart.html"
             },
             "order_admin": {
                 "title": "订单管理页",
-                "prototypePath": "web/order_admin.html",
+                "platform": "web",
+                "prototypePath": "../prototyping/page_order_admin.html",
                 "docPath": "doc/web/order_admin.html"
             }
         };
@@ -357,11 +316,15 @@
                 singleView.style.display = 'block';
                 splitView.style.display = 'none';
                 contentIframe.src = 'html/overview.html';
+                // Header is not needed for overview as it has its own styling
+                pageTitle.style.display = 'none';
             } else {
                 singleView.style.display = 'none';
                 splitView.style.display = 'flex';
-                prototypeIframe.src = pageData.prototypePath;
-                documentIframe.src = pageData.docPath;
+                pageTitle.style.display = 'none'; // Keep hidden, since docs have their own titles and Figma 30:296 does not show a global header title for page view
+                
+                prototypeIframe.src = pageData.prototypePath || '';
+                documentIframe.src = pageData.docPath || '';
             }
         }
         

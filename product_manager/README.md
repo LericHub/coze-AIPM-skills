@@ -1,6 +1,6 @@
 # AIPM 产品经理工作流 Skill
 
-> 从模糊需求到标准 PRD 的完整链路，9 节点标准化流程
+> 从模糊需求到标准 PRD 的完整链路，8 节点标准化流程
 
 ---
 
@@ -9,7 +9,7 @@
 `product_manager` 是一个产品经理全流程工作流 Skill，专注于帮助 AI Agent 完成从需求理解到 PRD 文档交付的完整产品开发流程。
 
 **核心特点：**
-- 9 节点标准化流程：路由 → 头脑风暴 → 需求澄清 → 需求分析 → 详细设计 → 项目初始化 → 原型制作 → PRD 撰写 → 变更分析
+- 8 节点标准化流程：路由 → 头脑风暴 → 需求澄清 → 需求分析 → 详细设计 → 原型制作 → PRD 撰写 → 变更分析
 - 独立变更分析节点 - 增量变更无需整体回退
 - 三级用户确认机制
 - 完整状态持久化可追溯
@@ -193,7 +193,7 @@
   5. 生成交互式 PRD 查看器 (index.html)
   6. 验证清单检查
   7. 等待用户确认
-[OUTPUT] ./output/{project}/output/V{version}/V{version}_{datetime}/
+[OUTPUT] ./output/V{version}/writing/
   - index.html (PRD 查看器)
   - html/overview.html (需求概述)
   - doc/app/*.html (C端页面文档)
@@ -292,6 +292,9 @@
 ```
 product_manager/
 ├── SKILL.md                    # Skill 定义文件
+├── legacy/
+│   ├── README.md               # 历史材料说明
+│   └── scripts/                # 旧 shell 工作流，仅保留作历史参考
 ├── nodes/
 │   ├── README.md               # 节点目录说明
 │   ├── _manage.md              # 内部共享能力（状态、记忆、版本）
@@ -308,10 +311,11 @@ product_manager/
 │   ├── overview_template.html      # 概述页面模板
 │   ├── page_doc_template.html     # 页面文档模板
 │   └── loreal_mock_database.md    # Mock 数据（欧莱雅兰蔻）
-├── scripts/                    # 工具脚本（已弃用）
 ├── assets/                     # 静态资源（图片等）
 └── ...
 ```
+
+说明：`legacy/scripts/` 不属于当前受支持的 skill 路径，仅作为旧实现的历史参考保留。
 
 ---
 
