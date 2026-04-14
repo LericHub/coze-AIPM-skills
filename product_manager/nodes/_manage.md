@@ -74,6 +74,39 @@ Memory.json 存储在项目根目录，作为项目的唯一事实来源。
 #### get_project_directory()
 返回项目目录名称（如 `xxx_20250412`）。
 
+#### get_project_root_path(project_name, date, order)
+返回 `/AIPM/{project_name}_{date}_{order}/`。
+
+#### get_version_output_path(project_name, date, order, version)
+返回项目根目录下的版本目录路径。
+
+#### get_node_output_path(project_name, date, order, node_name, version)
+返回节点输出目录路径。
+
+#### get_output_folder_path(project_name, date, order)
+返回0output统一输出目录路径：`/AIPM/{project_name}_{date}_{order}/0output/`。
+
+项目目录结构如下：
+```
+/AIPM/{project_name}_{date}_{order}/
+├── 0output/               # 统一输出目录，存放最新版本的打包文件
+├── V{version}/            # 版本目录
+│   ├── brainstorm/
+│   ├── clarify/
+│   ├── analysis/
+│   ├── detail/
+│   ├── prototyping/
+│   └── writing/
+└── Memory.json
+```
+
+#### package_latest_version_output(project_name, date, order, version, node_name)
+将最新版本的产出物打包并复制到0output目录：
+1. 确认0output目录存在，不存在则创建
+2. 打包 `/AIPM/{project_name}_{date}_{order}/V{version}/` 目录
+3. 生成文件名：`{project_name}_V{version}_{node_name}_{YYYYMMDD_HHmm}.zip`
+4. 将打包文件复制到 `/AIPM/{project_name}_{date}_{order}/0output/` 目录
+
 #### read_memory()
 读取 Memory.json 文件，返回 JSON 对象。
 
@@ -83,14 +116,14 @@ Memory.json 结构：
   "project": {
     "name": "项目名称",
     "version": "V1.0",
-    "directory": "项目名_YYYYMMDD_HHMMSS"
+    "directory": "{project_name}_{date}_{order}"
   },
   "current_node": "detail",
   "node_list": [
     {"name": "router", "status": "CONFIRM"},
     {"name": "brainstorm", "status": "CONFIRM"},
     {"name": "clarify", "status": "CONFIRM"},
-    {"name": "detail", "status": "DRAFT", "file": "output/V1.0/detail/detail.md"},
+    {"name": "detail", "status": "DRAFT", "file": "/AIPM/{project_name}_{date}_{order}/V1.0/detail/detail.md"},
     {"name": "prototyping", "status": "PENDING"},
     {"name": "writing", "status": "PENDING"},
     {"name": "change", "status": "PENDING"}
@@ -150,8 +183,8 @@ Memory.json 结构：
 
 ```markdown
 ## 完成后
-1. 保存产出到文件（如 output/V1.0/detail/detail.md）
-2. 调用 manage.update_node_output("detail", "output/V1.0/detail/detail.md")
+1. 保存产出到文件（如 /AIPM/{project_name}_{date}_{order}/V{version}/detail/detail.md）
+2. 调用 manage.update_node_output("detail", "/AIPM/{project_name}_{date}_{order}/V{version}/detail/detail.md")
 3. ... 继续用户确认流程
 ```
 
@@ -164,14 +197,14 @@ Memory.json 结构：
   "project": {
     "name": "项目名称",
     "version": "V1.0",
-    "directory": "项目名_YYYYMMDD_HHMMSS"
+    "directory": "{project_name}_{date}_{order}"
   },
   "current_node": "detail",
   "node_list": [
     {"name": "router", "status": "CONFIRM"},
     {"name": "brainstorm", "status": "CONFIRM"},
     {"name": "clarify", "status": "CONFIRM"},
-    {"name": "detail", "status": "DRAFT", "file": "output/V1.0/detail/detail.md"},
+    {"name": "detail", "status": "DRAFT", "file": "/AIPM/{project_name}_{date}_{order}/V1.0/detail/detail.md"},
     {"name": "prototyping", "status": "PENDING"},
     {"name": "writing", "status": "PENDING"},
     {"name": "change", "status": "PENDING"}

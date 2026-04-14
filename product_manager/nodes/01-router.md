@@ -18,7 +18,7 @@ description: 入口路由器，定义全局执行规范和节点概览
 1. **节点线性执行**: router → brainstorm → clarify → analysis → detail → prototyping → writing → change
 2. **用户确认**: 所有节点完成后需确认
 3. **状态管理**: 由 `_manage` 内部能力统一处理（状态更新、快照持久化、版本管理）
-4. **目录初始化**: 在 brainstorm 节点首次需要写文件时创建（第一个需要写文件的节点）
+4. **目录初始化**: 在 brainstorm 节点首次需要写文件时创建 `/AIPM/{project_name}_{date}_{order}/` 结构（第一个需要写文件的节点）
 
 ---
 
@@ -92,7 +92,7 @@ description: 入口路由器，定义全局执行规范和节点概览
 ### 目录结构
 
 ```
-output/V{version}/
+/AIPM/{project_name}_{date}_{order}/V{version}/
 ├── brainstorm/brainstorm.md
 ├── clarify/clarify.md
 ├── analysis/analysis.md

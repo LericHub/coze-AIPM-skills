@@ -78,15 +78,15 @@ description: 需求分析技能。基于已确认的需求信息，生成初步P
 ## 输出文件
 
 - 文件名: `analysis.md`
-- 路径: `./output/V{version}/analysis/analysis.md`
+- 路径: `/AIPM/{project_name}_{date}_{order}/V{version}/analysis/analysis.md`
 - 生成规则: 见 [01-router.md](01-router.md) 中的文件生成规则
 
 ---
 
 ## 完成后
 
-1. 保存产出到文件：`./output/V{version}/analysis/analysis.md`
-2. 调用 manage.update_node_output("analysis", "output/V{version}/analysis/analysis.md")
+1. 保存产出到文件：`/AIPM/{project_name}_{date}_{order}/V{version}/analysis/analysis.md`
+2. 调用 manage.update_node_output("analysis", "/AIPM/{project_name}_{date}_{order}/V{version}/analysis/analysis.md")
 3. 展示产出摘要
 4. 等待用户确认
 5. 确认后 → 调用 manage.update_node_status("analysis", "CONFIRM")

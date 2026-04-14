@@ -71,7 +71,7 @@
   3. 循环确认：根据用户反馈调整或确认
   4. 整理产出：生成确认版功能骨架
   5. 等待用户确认
-[OUTPUT] ./output/V{version}/brainstorm/brainstorm.md
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/brainstorm/brainstorm.md
 ```
 
 ---
@@ -93,7 +93,7 @@
   4. 停止规则：业务背景清晰 或 已完成 3 轮
   5. 结构化复述需求
   6. 保存文件，等待用户确认
-[OUTPUT] ./output/V{version}/clarify/clarify.md
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/clarify/clarify.md
 
 禁止：询问技术实现细节（数据库设计、接口规范、技术选型）
 ```
@@ -118,7 +118,7 @@
   5. 埋点方案表格
   6. 异常场景处理
   7. 等待用户确认
-[OUTPUT] ./output/V{version}/analysis/analysis.md
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/analysis/analysis.md
 ```
 
 ---
@@ -144,7 +144,7 @@
      - 业务流程图 (Mermaid)
      - 事件逻辑、异常场景
   6. 等待用户确认
-[OUTPUT] ./output/V{version}/detail/detail.md
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/detail/detail.md
 ```
 
 ---
@@ -168,7 +168,7 @@
      - 如未安装：直接基于 TDesign 组件库生成
   5. 生成 proto_index.html 原型索引
   6. 等待用户确认
-[OUTPUT] ./output/V{version}/prototyping/
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/prototyping/
   - proto_index.html (原型索引)
   - page_{page_name}.html (各页面原型)
 ```
@@ -193,7 +193,7 @@
   5. 生成交互式 PRD 查看器 (index.html)
   6. 验证清单检查
   7. 等待用户确认
-[OUTPUT] ./output/V{version}/writing/
+[OUTPUT] /AIPM/{project_name}_{date}_{order}/V{version}/writing/
   - index.html (PRD 查看器)
   - html/overview.html (需求概述)
   - doc/app/*.html (C端页面文档)
@@ -322,7 +322,7 @@ product_manager/
 ## 输出文件结构
 
 ```
-./output/V{version}/
+/AIPM/{project_name}_{date}_{order}/V{version}/
 ├── brainstorm/
 │   └── brainstorm.md          # 功能骨架
 ├── clarify/

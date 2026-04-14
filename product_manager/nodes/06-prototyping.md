@@ -51,7 +51,7 @@ description: 原型设计技能。基于详细设计生成 ASCII 线框图（自
 ## 输出文件
 
 - 文件名: `page_{page_name}.html`
-- 路径: `./output/V{version}/prototyping/{platform}/`
+- 路径: `/AIPM/{project_name}_{date}_{order}/V{version}/prototyping/{platform}/`
   - 平台子目录: `app/` (C端页面) / `web/` (B端页面)
   - `page_{page_name}.html`: 各页面原型文件
 - 生成规则: 见 [01-router.md](01-router.md) 中的文件生成规则
@@ -61,11 +61,11 @@ description: 原型设计技能。基于详细设计生成 ASCII 线框图（自
 
 ## 完成后
 
-1. 保存产出到文件：`./output/V{version}/prototyping/` 目录（按 app/web 分端存放）
-2. 调用 manage.update_node_output("prototyping", "output/V{version}/prototyping/")
+1. 保存产出到文件：`/AIPM/{project_name}_{date}_{order}/V{version}/prototyping/` 目录（按 app/web 分端存放）
+2. 调用 manage.update_node_output("prototyping", "/AIPM/{project_name}_{date}_{order}/V{version}/prototyping/")
 3. 展示产出摘要
 4. 等待用户确认
-5. 确认后 → 打包输出目录：`zip -r output/{project_name}_V{version}_output_{YYYYMMDD_HHmm}.zip output/V{version}/`
+5. 确认后 → 调用 manage.package_latest_version_output("{project_name}", "{date}", "{order}", "{version}", "prototyping")
 6. 确认后 → 调用 manage.update_node_status("prototyping", "CONFIRM")
 7. 确认后 → 调用 manage.transition_to_next_node()
 8. 确认后 → 调用 manage.persist_memory()
